@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="TourPlanner.BussinessLayer/TourPlanner.BussinessLayer.csproj" />
+  <Project Path="tourplanner.client/tourplanner.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="TourPlanner.DataAccessLayer/TourPlanner.DataAccessLayer.csproj" />
+  <Project Path="TourPlanner.Models/TourPlanner.Models.csproj" />
+  <Project Path="TourPlanner.Server/TourPlanner.Server.csproj" />
+</Solution>
