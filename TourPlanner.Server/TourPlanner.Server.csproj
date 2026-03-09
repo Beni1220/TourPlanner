@@ -17,9 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TourPlanner.BussinessLayer\TourPlanner.BussinessLayer.csproj" />
     <ProjectReference Include="..\tourplanner.client\tourplanner.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\TourPlanner.Models\TourPlanner.Models.csproj" />
   </ItemGroup>
 
 </Project>
