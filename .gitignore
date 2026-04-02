@@ -1,0 +1,37 @@
+# ========================
+# .NET / ASP.NET Core
+# ========================
+bin/
+obj/
+*.user
+*.suo
+.vs/
+appsettings.Development.json
+
+# ========================
+# Angular
+# ========================
+node_modules/
+dist/
+.angular/
+
+# ========================
+# Secrets & Umgebung
+# ========================
+.env
+.env.*
+*.pfx
+*.p12
+secrets.json
+
+# ========================
+# Logs
+# ========================
+*.log
+logs/
+
+# ========================
+# OS-spezifisch
+# ========================
+.DS_Store
+Thumbs.db
