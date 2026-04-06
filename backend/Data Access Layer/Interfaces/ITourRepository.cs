@@ -1,5 +1,5 @@
 public interface ITourRepository
 {
     List<Tour> GetAll();
-    void Add(Tour tour);
+    void Create(Tour tour);
 }
