@@ -50,7 +50,9 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast");
 
-app.MapControllers();
+//builder.Services.AddControllers(); ai meinte ich soll es hinzufügen damit es geht, aber app.MapControllers geht noch immer nicht
+
+//app.MapControllers();
 
 app.Run();
 
