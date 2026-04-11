@@ -14,3 +14,7 @@ services:
 
 volumes:
   postgres_data:
+
+#psql -U user -d tourplanner um in docker desktop zu schreiben
+
+#dotnet ef database updateted automatisch table erstellen

@@ -60,7 +60,8 @@
               "buildTarget": "tourplanner:build:production"
             },
             "development": {
-              "buildTarget": "tourplanner:build:development"
+              "buildTarget": "tourplanner:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

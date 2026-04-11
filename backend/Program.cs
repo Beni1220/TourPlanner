@@ -17,6 +17,11 @@ builder.Services.AddCors(options => {
 builder.Services.AddDbContext<TourPlannerContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddControllers();
+
+builder.Services.AddScoped<ITourRepository, TourRepository>();
+builder.Services.AddScoped<ITourService, TourService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,6 +35,19 @@ app.UseCors("AllowAngular");
 //app.UseHttpsRedirection();
 
 app.MapGet("/api/ping", () => Results.Json(new { message = "Hallo aus dem Backend!", timestamp = DateTime.UtcNow }));
+
+
+
+app.MapControllers();
+
+app.Run();
+
+
+/*
+record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+{
+    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+}
 
 var summaries = new[]
 {
@@ -49,14 +67,4 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast");
-
-//builder.Services.AddControllers(); ai meinte ich soll es hinzufügen damit es geht, aber app.MapControllers geht noch immer nicht
-
-//app.MapControllers();
-
-app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+*/
