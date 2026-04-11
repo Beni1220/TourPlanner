@@ -8,5 +8,9 @@ public class TourService : ITourService
     }
 
     public List<Tour> GetAllTours() => _repository.GetAll();
-    public void CreateTour(Tour tour) => _repository.Create(tour);
+    public Tour CreateTour(Tour tour) => _repository.Create(tour);
+
+    public void UpdateTour(Tour tour) => _repository.Update(tour);
+
+    public void DeleteTour(int id) => _repository.Delete(id);
 }

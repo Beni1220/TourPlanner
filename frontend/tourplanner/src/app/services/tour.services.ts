@@ -27,4 +27,13 @@ export class TourService {
   createTour(tour: Tour): Observable<Tour> {
     return this.http.post<Tour>(this.apiUrl, tour);
   }
+
+  updateTour(tour: Tour): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${tour.id}`, tour);
+  }
+
+  deleteTour(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
 }

@@ -1,5 +1,9 @@
 public interface ITourRepository
 {
     List<Tour> GetAll();
-    void Create(Tour tour);
+    Tour Create(Tour tour);
+
+    void Update(Tour tour);
+
+    void Delete(int id);
 }

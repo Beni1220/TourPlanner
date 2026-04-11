@@ -1,0 +1,224 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #090b1a;
+  color: #f4f7ff;
+}
+
+.app-shell {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.hero-panel {
+  background: linear-gradient(135deg, #2f4eff 0%, #ff8d2d 100%);
+  border-radius: 28px;
+  padding: 34px 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.18);
+}
+
+.eyebrow {
+  display: inline-flex;
+  color: rgba(255,255,255,0.85);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.75rem;
+  margin-bottom: 10px;
+}
+
+.hero-panel h1 {
+  margin: 0 0 10px;
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1.05;
+}
+
+.hero-panel p {
+  margin: 0;
+  max-width: 640px;
+  color: rgba(255,255,255,0.95);
+}
+
+.toast {
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  border-radius: 18px;
+  font-weight: 600;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.18);
+}
+
+.error-toast {
+  background: #ff3f5e;
+  color: white;
+}
+
+.create-card,
+.tour-card {
+  background: rgba(18, 22, 55, 0.96);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.14);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.small-label {
+  margin: 0;
+  color: #9bb0ff;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.create-card h2,
+.section-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+  color: white;
+  font-weight: 700;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.form-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+label {
+  font-size: 0.94rem;
+  color: rgba(255,255,255,0.75);
+}
+
+input,
+select {
+  width: 100%;
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 14px;
+  padding: 14px 16px;
+  background: rgba(10, 12, 35, 0.95);
+  color: #f4f7ff;
+  font-size: 1rem;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: rgba(95, 162, 255, 0.85);
+  box-shadow: 0 0 0 4px rgba(95, 162, 255, 0.12);
+}
+
+.hint,
+.section-hint {
+  margin: 0 0 18px;
+  color: rgba(255,255,255,0.65);
+}
+
+.primary-button,
+.secondary-button,
+.danger-button {
+  border: none;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 14px 22px;
+  font-weight: 700;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.primary-button {
+  background: linear-gradient(135deg, #2f4eff, #ff8d2d);
+  color: white;
+}
+
+.secondary-button {
+  background: rgba(255,255,255,0.08);
+  color: #f4f7ff;
+}
+
+.danger-button {
+  background: rgba(255, 71, 103, 0.14);
+  color: #ff6b7f;
+}
+
+.primary-button:hover,
+.secondary-button:hover,
+.danger-button:hover {
+  transform: translateY(-1px);
+}
+
+.list-section {
+  margin-top: 10px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.tour-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.tour-card {
+  position: relative;
+}
+
+.tour-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.tour-meta {
+  margin-bottom: 18px;
+  color: rgba(255,255,255,0.72);
+}
+
+.card-row {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 720px) {
+  .form-grid,
+  .card-row {
+    grid-template-columns: 1fr;
+  }
+}

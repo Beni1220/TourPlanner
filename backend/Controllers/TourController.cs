@@ -19,7 +19,26 @@ public class TourController : ControllerBase
     [HttpPost]
     public IActionResult Create(Tour tour)
     {
-        _service.CreateTour(tour);
+        var createdTour = _service.CreateTour(tour);
+        return Created($"api/tours/{createdTour.Id}", createdTour);
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult Update(int id, Tour tour)
+    {
+        if (id != tour.Id)
+        {
+            return BadRequest();
+        }
+
+        _service.UpdateTour(tour);
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        _service.DeleteTour(id);
         return Ok();
     }
 }

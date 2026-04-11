@@ -1,5 +1,9 @@
 public interface ITourService
 {
     List<Tour> GetAllTours();
-    void CreateTour(Tour tour);
+    Tour CreateTour(Tour tour);
+
+    void UpdateTour(Tour tour);
+
+    void DeleteTour(int id);
 }
