@@ -87,6 +87,7 @@ body {
 .section-header h2 {
   margin: 0;
   font-size: 1.4rem;
+  color: #ffffff;
 }
 
 .badge {
@@ -197,6 +198,7 @@ select:focus {
   font-size: 1.15rem;
   font-weight: 700;
   margin-bottom: 10px;
+  color: #ffb342;
 }
 
 .tour-meta {

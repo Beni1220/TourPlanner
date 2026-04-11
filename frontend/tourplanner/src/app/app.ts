@@ -27,7 +27,6 @@ import { TourService, Tour } from './services/tour.services';
             <p class="small-label">Neue Tour</p>
             <h2>Tour hinzufügen</h2>
           </div>
-          <span class="badge">+ Add</span>
         </div>
 
         <div class="form-row">
