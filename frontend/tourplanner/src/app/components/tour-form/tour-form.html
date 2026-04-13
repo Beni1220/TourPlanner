@@ -1,0 +1,83 @@
+<body>  
+    <section class="create-card">
+        <div class="card-header">
+          <div>
+            <p class="small-label">Neue Tour</p>
+            <h2>Tour hinzufügen</h2>
+          </div>
+        </div>
+
+
+        <div class="form-row">
+          <label>Name</label>
+          <input type="text" placeholder="Tourname" [(ngModel)]="newTour.name" />
+        </div>
+
+        <div class="form-row">
+          <label>Kategorie</label>
+          <select [(ngModel)]="newTour.category">
+            <option>Bike</option>
+            <option>Hike</option>
+            <option>Running</option>
+            <option>Vacation</option>
+          </select>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-row">
+            <label>Distance (km)</label>
+            <input type="number" min="0" [(ngModel)]="newTour.distanceKm" />
+          </div>
+          <div class="form-row">
+            <label>Duration (min)</label>
+            <input type="number" min="0" [(ngModel)]="newTour.durationMinutes" />
+          </div>
+        </div>
+
+        <p class="hint">Gib die Streckenlänge in km und die Dauer in Minuten ein.</p>
+        <button class="primary-button" (click)="addTour()">Tour hinzufügen</button>
+      </section>
+<section class="list-section">
+        <div class="section-header">
+          <div>
+            <h2>Touren</h2>
+            <p class="section-hint">Bearbeite Einträge direkt oder lösche veraltete Touren.</p>
+          </div>
+        </div>
+
+        <div class="tour-grid">
+          <article *ngFor="let tour of tours()" class="tour-card">
+            <ng-container *ngIf="editingTour?.id === tour.id; then editMode else viewMode"></ng-container>
+
+            <ng-template #editMode>
+              <div class="card-row" *ngIf="editingTour as currentEdit">
+                <input type="text" [(ngModel)]="currentEdit.name" />
+                <select [(ngModel)]="currentEdit.category">
+                  <option>Bike</option>
+                  <option>Hike</option>
+                  <option>Running</option>
+                  <option>Vacation</option>
+                </select>
+              </div>
+              <div class="card-row" *ngIf="editingTour as currentEdit">
+                <input type="number" min="0" [(ngModel)]="currentEdit.distanceKm" />
+                <input type="number" min="0" [(ngModel)]="currentEdit.durationMinutes" />
+              </div>
+              <div class="card-actions">
+                <button class="secondary-button" (click)="saveEdit()">Speichern</button>
+                <button class="danger-button" (click)="cancelEdit()">Abbrechen</button>
+              </div>
+            </ng-template>
+
+            <ng-template #viewMode>
+              <div class="tour-title">{{ tour.name }}</div>
+              <div class="tour-meta">{{ tour.category }} · {{ tour.distanceKm }} km · {{ tour.durationMinutes }} min</div>
+              <div class="card-actions">
+                <button class="secondary-button" (click)="startEdit(tour)">Bearbeiten</button>
+                <button class="danger-button" (click)="deleteTour(tour.id!)">Löschen</button>
+              </div>
+            </ng-template>
+          </article>
+        </div>
+      </section>
+</body>
