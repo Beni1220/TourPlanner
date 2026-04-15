@@ -69,6 +69,20 @@ export class TourForm {
     }
   }
 
+  async selectTour(tour: Tour) {
+    try {
+      const from = await this.openRouteService.getCoordinates(tour.from);
+      const to = await this.openRouteService.getCoordinates(tour.to);
+
+      const route: [[number, number], [number, number]] = [from, to];
+
+      this.tourService.tourAdded.next(route);
+
+    } catch (err) {
+      console.error('Fehler beim Laden der Route:', err);
+      this.error.set('Route konnte nicht geladen werden');
+    }
+  }
 
   loadTours(): void {
     this.tourService.getTours().subscribe({

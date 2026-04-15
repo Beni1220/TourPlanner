@@ -71,7 +71,7 @@
         </div>
 
         <div class="tour-grid">
-          <article *ngFor="let tour of tours()" class="tour-card">
+          <article *ngFor="let tour of tours()" class="tour-card" (click)="selectTour(tour)">
             <ng-container *ngIf="editingTour?.id === tour.id; then editMode else viewMode"></ng-container>
 
             <ng-template #editMode>
