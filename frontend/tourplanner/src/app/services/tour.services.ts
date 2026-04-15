@@ -1,14 +1,18 @@
 // tour.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+
 
 export interface Tour {
   id?: number;
   name: string;
-  category: 'Bike' | 'Hike' | 'Running' | 'Vacation';
-  distanceKm: number;
-  durationMinutes: number;
+  description?: string;
+  from: string;
+  to: string;
+  transportType: 'Bike' | 'Hike' | 'Running' | 'Vacation';
+  estimatedTime: number;
+  tourDistance: number;
 }
 
 @Injectable({
@@ -35,5 +39,7 @@ export class TourService {
   deleteTour(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  tourAdded = new Subject<[[number, number], [number, number]]>();
 
 }

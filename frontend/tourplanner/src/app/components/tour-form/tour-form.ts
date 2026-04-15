@@ -2,6 +2,8 @@ import { Component, signal } from '@angular/core';
 import { TourService, Tour } from '../../services/tour.services';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { OpenrouteService } from '../../services/openroute.service';
+import { MapComponent } from '../map/map';
 
 
 @Component({
@@ -17,14 +19,31 @@ export class TourForm {
 
   newTour: Tour = {
     name: '',
-    category: 'Bike',
-    distanceKm: 0,
-    durationMinutes: 0
+    description: '',
+    from: '',
+    to: '',
+    transportType: 'Bike',
+    tourDistance: 0,
+    estimatedTime: 0,
   };
+  route: [[number, number], [number, number]] = [[0, 0], [0, 0]];
 
-  constructor(private tourService: TourService) {
+  constructor(private tourService: TourService, private openRouteService: OpenrouteService) {
     this.loadTours();
   }
+
+  async createRoutes() {
+    try {
+      const from = await this.openRouteService.getCoordinates(this.newTour.from);
+      const to = await this.openRouteService.getCoordinates(this.newTour.to);
+
+      this.route = [from, to];
+
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
 
   loadTours(): void {
     this.tourService.getTours().subscribe({
@@ -33,7 +52,8 @@ export class TourForm {
     });
   }
 
-  addTour(): void {
+
+  async addTour(): Promise<void> {
     if (!this.newTour.name.trim()) {
       this.error.set('Bitte Name eingeben!');
       return;
@@ -46,7 +66,15 @@ export class TourForm {
         this.error.set('');
       },
       error: (err) => this.error.set('Fehler beim Erstellen: ' + err.message)
+      
+      
     });
+    await this.createRoutes();
+    
+    // Notify the map component to update the route
+    this.tourService.tourAdded.next(this.route);
+    //this.mapComponent.getRoute(this.route);
+    
   }
 
   startEdit(tour: Tour): void {
@@ -87,16 +115,19 @@ export class TourForm {
         }
         this.error.set('');
       },
-      error: (err) => this.error.set('Fehler beim L�schen: ' + err.message)
+      error: (err) => this.error.set('Fehler beim Löschen: ' + err.message)
     });
   }
 
   private resetNewTour(): void {
     this.newTour = {
       name: '',
-      category: 'Bike',
-      distanceKm: 0,
-      durationMinutes: 0
+      description: '',
+      from: '',
+      to: '',
+      transportType: 'Bike',
+      estimatedTime: 0,
+      tourDistance: 0,
     };
   }
 }

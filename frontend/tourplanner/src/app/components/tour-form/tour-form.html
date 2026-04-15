@@ -1,5 +1,9 @@
 <body>  
+      <div *ngIf="error()" class="toast error-toast">
+        {{ error() }}
+      </div>
     <section class="create-card">
+       
         <div class="card-header">
           <div>
             <p class="small-label">Neue Tour</p>
@@ -14,8 +18,13 @@
         </div>
 
         <div class="form-row">
+          <label>Description</label>
+          <input type="text" placeholder="Beschreibung" [(ngModel)]="newTour.description" />
+        </div>
+
+        <div class="form-row">
           <label>Kategorie</label>
-          <select [(ngModel)]="newTour.category">
+          <select [(ngModel)]="newTour.transportType">
             <option>Bike</option>
             <option>Hike</option>
             <option>Running</option>
@@ -25,16 +34,21 @@
 
         <div class="form-grid">
           <div class="form-row">
-            <label>Distance (km)</label>
-            <input type="number" min="0" [(ngModel)]="newTour.distanceKm" />
+            <label>From</label>
+            <!---->
+            <input type="text" placeholder="Von (z.B. Wien)"  [(ngModel)]="newTour.from"/>
           </div>
           <div class="form-row">
-            <label>Duration (min)</label>
-            <input type="number" min="0" [(ngModel)]="newTour.durationMinutes" />
+            <label>To</label>
+            <!--[(ngModel)]="to"-->
+            <input type="text" placeholder="Nach (z.B. Graz)"  [(ngModel)]="newTour.to"/>
           </div>
         </div>
 
-        <p class="hint">Gib die Streckenlänge in km und die Dauer in Minuten ein.</p>
+        <div class="form-row">
+          <label>Estimated Time</label>
+          <input type="number" placeholder="Geschätzte Dauer (Minuten)" [(ngModel)]="newTour.estimatedTime" />
+        </div>
         <button class="primary-button" (click)="addTour()">Tour hinzufügen</button>
       </section>
 <section class="list-section">
@@ -52,16 +66,18 @@
             <ng-template #editMode>
               <div class="card-row" *ngIf="editingTour as currentEdit">
                 <input type="text" [(ngModel)]="currentEdit.name" />
-                <select [(ngModel)]="currentEdit.category">
+                <input type="text" [(ngModel)]="currentEdit.description" />
+                <select [(ngModel)]="currentEdit.transportType">
                   <option>Bike</option>
                   <option>Hike</option>
                   <option>Running</option>
                   <option>Vacation</option>
                 </select>
+                <input type="text" [(ngModel)]="currentEdit.from" />
+                <input type="text" [(ngModel)]="currentEdit.to" />
               </div>
               <div class="card-row" *ngIf="editingTour as currentEdit">
-                <input type="number" min="0" [(ngModel)]="currentEdit.distanceKm" />
-                <input type="number" min="0" [(ngModel)]="currentEdit.durationMinutes" />
+                <input type="number" min="0" [(ngModel)]="currentEdit.estimatedTime" />
               </div>
               <div class="card-actions">
                 <button class="secondary-button" (click)="saveEdit()">Speichern</button>
@@ -71,7 +87,7 @@
 
             <ng-template #viewMode>
               <div class="tour-title">{{ tour.name }}</div>
-              <div class="tour-meta">{{ tour.category }} · {{ tour.distanceKm }} km · {{ tour.durationMinutes }} min</div>
+              <div class="tour-meta">{{ tour.transportType }} · {{ tour.from }} from · {{ tour.to }} to</div>
               <div class="card-actions">
                 <button class="secondary-button" (click)="startEdit(tour)">Bearbeiten</button>
                 <button class="danger-button" (click)="deleteTour(tour.id!)">Löschen</button>

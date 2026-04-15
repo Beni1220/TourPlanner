@@ -19,6 +19,11 @@ public class TourController : ControllerBase
     [HttpPost]
     public IActionResult Create(Tour tour)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState); // 🔥 zeigt dir EXAKT den Fehler
+        }
+
         var createdTour = _service.CreateTour(tour);
         return Created($"api/tours/{createdTour.Id}", createdTour);
     }

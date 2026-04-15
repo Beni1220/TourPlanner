@@ -2,7 +2,11 @@ public class Tour
 {
     public int Id { get; set; }
     public required string Name { get; set; }
-    public required string Category { get; set; }
-    public int DistanceKm { get; set; }
-    public int DurationMinutes { get; set; }
+    public string Description { get; set; }
+    public required string From { get; set; }
+    public required string To { get; set; }
+    public required string TransportType { get; set; }
+    public required double TourDistance{ get; set; }
+    public required double EstimatedTime{ get; set; }
+    //public required string routeInformation { get; set; }
 }

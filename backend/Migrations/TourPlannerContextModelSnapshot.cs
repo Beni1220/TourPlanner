@@ -28,17 +28,29 @@ namespace backend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Category")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("DistanceKm")
-                        .HasColumnType("integer");
+                    b.Property<double>("EstimatedTime")
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("DurationMinutes")
-                        .HasColumnType("integer");
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("TourDistance")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("TransportType")
                         .IsRequired()
                         .HasColumnType("text");
 

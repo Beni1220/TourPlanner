@@ -16,6 +16,7 @@
         {
             _context.Tours.Add(tour);
             _context.SaveChanges();
+            Console.WriteLine($"Tour created with ID: {tour.Id}");
             return tour;
         }
 
@@ -25,9 +26,12 @@
             if (existingTour != null)
             {
                 existingTour.Name = tour.Name;
-                existingTour.Category = tour.Category;
-                existingTour.DistanceKm = tour.DistanceKm;
-                existingTour.DurationMinutes = tour.DurationMinutes;
+                existingTour.Description = tour.Description;
+                existingTour.From = tour.From;
+                existingTour.To = tour.To;
+                existingTour.TransportType = tour.TransportType;
+                //existingTour.estimatedTime = tour.estimatedTime; wird automatisch von api berechnet?
+                //existingTour.routeInformation = tour.routeInformation; graphical display für die route
                 _context.SaveChanges();
             }
         }

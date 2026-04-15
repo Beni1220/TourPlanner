@@ -17,4 +17,4 @@ volumes:
 
 #psql -U user -d tourplanner um in docker desktop zu schreiben
 
-#dotnet ef database updateted automatisch table erstellen
+#dotnet ef database update ----ted automatisch table erstellen
