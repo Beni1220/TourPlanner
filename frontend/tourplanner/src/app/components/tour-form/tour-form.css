@@ -218,6 +218,61 @@ select:focus {
   gap: 10px;
 }
 
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+.success {
+  color: green;
+  font-size: 12px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+button[disabled] {
+  background: rgba(95, 162, 255, 0.25);
+  color: #5fa2ff;
+  cursor: not-allowed;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 22px;
+  font-weight: 700;
+  transition: background 0.16s ease, color 0.16s ease;
+}
+
+button[disabled]:hover {
+  background: rgba(255, 71, 103, 0.25);
+  color: #ff6b7f;
+  transform: none;
+}
+
+button:not([disabled]).add-tour-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 22px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.16s ease, transform 0.16s ease;
+}
+
+button:not([disabled]).add-tour-btn:hover {
+  background: #16a34a;
+  transform: translateY(-1px);
+}
+
 @media (max-width: 720px) {
   .form-grid,
   .card-row {

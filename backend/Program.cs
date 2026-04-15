@@ -19,8 +19,11 @@ builder.Services.AddDbContext<TourPlannerContext>(options =>
 
 builder.Services.AddControllers();
 
+// was bedeutet das hier?
 builder.Services.AddScoped<ITourRepository, TourRepository>();
 builder.Services.AddScoped<ITourService, TourService>();
+builder.Services.AddScoped<ITourLogsRepository, TourLogsRepository>();
+builder.Services.AddScoped<ITourLogsService, TourLogsService>();
 
 var app = builder.Build();
 

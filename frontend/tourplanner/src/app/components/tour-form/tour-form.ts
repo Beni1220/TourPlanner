@@ -3,7 +3,6 @@ import { TourService, Tour } from '../../services/tour.services';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { OpenrouteService } from '../../services/openroute.service';
-import { MapComponent } from '../map/map';
 
 
 @Component({
@@ -28,8 +27,33 @@ export class TourForm {
   };
   route: [[number, number], [number, number]] = [[0, 0], [0, 0]];
 
+  fromValid = signal<boolean | null>(null);
+  toValid = signal<boolean | null>(null);
+  
+
   constructor(private tourService: TourService, private openRouteService: OpenrouteService) {
     this.loadTours();
+  }
+
+  public validatePlace(place: string, type: 'from' | 'to') {
+    if (!place.trim()) {
+      if (type === 'from') this.fromValid.set(null);
+      else this.toValid.set(null);
+      return;
+    }
+
+    setTimeout(async () => {
+      try {
+        await this.openRouteService.getCoordinates(place);
+
+        if (type === 'from') this.fromValid.set(true);
+        else this.toValid.set(true);
+
+      } catch {
+        if (type === 'from') this.fromValid.set(false);
+        else this.toValid.set(false);
+      }
+    }, 500); // debounce
   }
 
   async createRoutes() {
@@ -37,6 +61,7 @@ export class TourForm {
       const from = await this.openRouteService.getCoordinates(this.newTour.from);
       const to = await this.openRouteService.getCoordinates(this.newTour.to);
 
+      //this.route = [[from[0], from[1]], [to[0], to[1]]];
       this.route = [from, to];
 
     } catch (err) {
@@ -59,6 +84,11 @@ export class TourForm {
       return;
     }
 
+    await this.createRoutes();
+
+    this.tourService.tourAdded.next(this.route);
+    // Notify the map component to update the route
+
     this.tourService.createTour(this.newTour).subscribe({
       next: (tour) => {
         this.tours.update(t => [...t, tour]);
@@ -69,12 +99,10 @@ export class TourForm {
       
       
     });
-    await this.createRoutes();
-    
-    // Notify the map component to update the route
-    this.tourService.tourAdded.next(this.route);
+   
+    this.fromValid.set(null);
+    this.toValid.set(null);
     //this.mapComponent.getRoute(this.route);
-    
   }
 
   startEdit(tour: Tour): void {

@@ -19,12 +19,15 @@ L.Icon.Default.mergeOptions({
 export class MapComponent implements AfterViewInit {
 
   private map!: L.Map;
+  private markers: L.Marker[] = [];
+  private routeLayer?: L.GeoJSON;
+
 
   ngAfterViewInit(): void {
     this.initMap();
   }
-  constructor(private tourService: TourService) {}
 
+  constructor(private tourService: TourService) {}
   
   ngOnInit() {
     this.tourService.tourAdded.subscribe(coordinates => {
@@ -41,7 +44,11 @@ export class MapComponent implements AfterViewInit {
   }
 
   public async getRoute(newRoute: any): Promise<void> {
-    
+    if (!newRoute || !newRoute[0] || !newRoute[1]) {
+      console.error('Ungültige Route:', newRoute);
+      return;
+    }
+    this.clearMap();
     const apiKey = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjY1ZWZkM2M2YmI5ZDQyNGI4MGI0M2M2Y2E0Zjg1M2NlIiwiaCI6Im11cm11cjY0In0=';
 
     const body = {
@@ -62,14 +69,32 @@ export class MapComponent implements AfterViewInit {
 
     const data = await response.json();
 
-    const route = L.geoJSON(data, {
+    this.routeLayer = L.geoJSON(data, {
       style: { color: 'blue', weight: 5 }
-    });
+    }).addTo(this.map);
 
-    route.addTo(this.map);
+    // route.addTo(this.map);
 
-    L.marker(newRoute[0]).addTo(this.map).bindPopup('Start');
-    L.marker(newRoute[1]).addTo(this.map).bindPopup('Ziel');
+    this.markers.push(
+      L.marker(newRoute[0]).addTo(this.map).bindPopup('Start')
+    );
+
+    this.markers.push(
+      L.marker(newRoute[1]).addTo(this.map).bindPopup('Ziel')
+    );
+  }
+
+  public clearMap(): void {
+
+    // Marker löschen
+    this.markers.forEach(m => this.map.removeLayer(m));
+    this.markers = [];
+
+    // Route löschen
+    if (this.routeLayer) {
+      this.map.removeLayer(this.routeLayer);
+      this.routeLayer = undefined;
+    }
   }
 
   public test(): void {

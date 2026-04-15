@@ -33,15 +33,18 @@
         </div>
 
         <div class="form-grid">
-          <div class="form-row">
+          <div class="form-col">
             <label>From</label>
-            <!---->
-            <input type="text" placeholder="Von (z.B. Wien)"  [(ngModel)]="newTour.from"/>
+            <input type="text" [(ngModel)]="newTour.from" (ngModelChange)="validatePlace($event, 'from')" />
+            <p *ngIf="fromValid() === false" class="error">Ort nicht gefunden</p>
+            <p *ngIf="fromValid() === true" class="success">✔ gefunden</p>
           </div>
-          <div class="form-row">
+
+          <div class="form-col">
             <label>To</label>
-            <!--[(ngModel)]="to"-->
-            <input type="text" placeholder="Nach (z.B. Graz)"  [(ngModel)]="newTour.to"/>
+            <input type="text" [(ngModel)]="newTour.to" (ngModelChange)="validatePlace($event, 'to')" />
+            <p *ngIf="toValid() === false" class="error">Ort nicht gefunden</p>
+            <p *ngIf="toValid() === true" class="success">✔ gefunden</p>
           </div>
         </div>
 
@@ -49,7 +52,15 @@
           <label>Estimated Time</label>
           <input type="number" placeholder="Geschätzte Dauer (Minuten)" [(ngModel)]="newTour.estimatedTime" />
         </div>
-        <button class="primary-button" (click)="addTour()">Tour hinzufügen</button>
+          <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+            <button
+              class="add-tour-btn"
+              (click)="addTour()"
+              [disabled]="fromValid() !== true || toValid() !== true"
+            >
+              Tour hinzufügen
+            </button>
+          </div>
       </section>
 <section class="list-section">
         <div class="section-header">

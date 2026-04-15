@@ -7,5 +7,6 @@ public class TourPlannerContext : DbContext
         : base(options) { }
 
     public DbSet<Tour> Tours { get; set; }
+    public DbSet<TourLogs> TourLogs { get; set; }
     
 }
