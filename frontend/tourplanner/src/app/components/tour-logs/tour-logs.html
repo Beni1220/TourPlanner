@@ -1,1 +1,127 @@
-<p>tour-logs works!</p>
+<body>
+  <div *ngIf="error()" class="toast error-toast">
+    {{ error() }}
+  </div>
+
+  <section class="create-card">
+    <div class="card-header">
+      <div>
+        <p class="small-label">Neuer Eintrag</p>
+        <h2>Tour-Log hinzufügen</h2>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label>Datum</label>
+      <input type="date" [ngModel]="newTourLog.date | date:'yyyy-MM-dd'" (ngModelChange)="newTourLog.date = parseDate($event)" />
+    </div>
+
+    <div class="form-row">
+      <label>Kommentar</label>
+      <textarea 
+        class="auto-textarea"
+        rows="1"
+        placeholder="Beschreibe deine Tour..."
+        [(ngModel)]="newTourLog.comment"
+        (input)="autoResize($event)">
+      </textarea>
+    </div>
+
+    <div class="form-row">
+      <label>Schwierigkeit</label>
+      <select [(ngModel)]="newTourLog.difficulty">
+        <option value="0">Easy</option>
+        <option value="1">Medium</option>
+        <option value="2">Hard</option>
+      </select>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-col">
+        <label>Bewertung</label>
+        <input type="number" min="0" max="5" placeholder="0-5" [(ngModel)]="newTourLog.rating" />
+      </div>
+
+      <div class="form-col">
+        <label>Distanz (km)</label>
+        <input type="number" min="0" placeholder="Distanz" [(ngModel)]="newTourLog.totalDistance" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label>Zeit (Minuten)</label>
+      <input type="number" min="0" placeholder="Dauer" [(ngModel)]="newTourLog.totalTime" />
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+      <button class="add-tour-btn" (click)="addTourLog()">
+        Log hinzufügen
+      </button>
+    </div>
+  </section>
+
+  <section class="list-section">
+    <div class="section-header">
+      <div>
+        <h2>Tour-Logs</h2>
+        <p class="section-hint">Bearbeite Einträge direkt oder lösche veraltete Logs.</p>
+      </div>
+    </div>
+
+    <div class="tour-grid">
+      <article *ngFor="let log of tourLogs()" class="tour-card">
+        <div *ngIf="editingLog?.id === log.id">
+          <div class="form-row">
+            <label>Datum</label>
+            <input type="date" [ngModel]="editingLog!.date | date:'yyyy-MM-dd'" (ngModelChange)="editingLog!.date = parseDate($event)" />
+          </div>
+          <div class="form-row">
+            <label>Kommentar</label>
+            <input type="text" placeholder="Beschreibe deine Tour..." [(ngModel)]="editingLog!.comment" />
+          </div>
+          <div class="form-row">
+            <label>Schwierigkeit</label>
+            <select [(ngModel)]="editingLog!.difficulty">
+              <option value="0">Easy</option>
+              <option value="1">Medium</option>
+              <option value="2">Hard</option>
+            </select>
+          </div>
+          <div class="form-grid">
+            <div class="form-col">
+              <label>Bewertung</label>
+              <input type="number" min="0" max="5" [(ngModel)]="editingLog!.rating" />
+            </div>
+            <div class="form-col">
+              <label>Distanz (km)</label>
+              <input type="number" min="0" [(ngModel)]="editingLog!.totalDistance" />
+            </div>
+          </div>
+          <div class="form-row">
+            <label>Zeit (Minuten)</label>
+            <input type="number" min="0" [(ngModel)]="editingLog!.totalTime" />
+          </div>
+          <div class="card-actions">
+            <button class="secondary-button" (click)="saveEdit()">Speichern</button>
+            <button class="danger-button" (click)="cancelEdit()">Abbrechen</button>
+          </div>
+        </div>
+
+        <div *ngIf="editingLog?.id !== log.id">
+          <div class="tour-title">{{ log.date | date: 'dd.MM.yyyy' }}</div>
+          <div class="tour-info">
+            <p><strong>Kommentar:</strong> {{ log.comment }}</p>
+            <p><strong>Schwierigkeit:</strong> {{ getDifficultyLabel(log.difficulty) }}</p>
+            <p><strong>Bewertung:</strong> {{ log.rating }}/5</p>
+            <p><strong>Distanz:</strong> {{ log.totalDistance }} km</p>
+            <p><strong>Zeit:</strong> {{ log.totalTime }} min</p>
+          </div>
+          <div class="card-actions">
+            <button class="secondary-button" (click)="startEdit(log)">Bearbeiten</button>
+            <button class="danger-button" (click)="deleteTourLog(log.id!)">Löschen</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</body>

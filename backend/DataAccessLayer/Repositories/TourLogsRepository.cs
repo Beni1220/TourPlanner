@@ -14,6 +14,7 @@
 
         public TourLogs CreateTourLog(TourLogs tourLogs)
         {
+            tourLogs.Date = tourLogs.Date.ToUniversalTime();
             _context.TourLogs.Add(tourLogs);
             _context.SaveChanges();
             Console.WriteLine($"Tour-log created with ID: {tourLogs.Id}");
@@ -25,7 +26,7 @@
             var existingTourLog = _context.TourLogs.Find(tourLogs.Id);
             if (existingTourLog != null)
             {
-                existingTourLog.Date = tourLogs.Date;
+                existingTourLog.Date = tourLogs.Date.ToUniversalTime();
                 existingTourLog.Comment = tourLogs.Comment;
                 existingTourLog.Difficulty = tourLogs.Difficulty;
                 existingTourLog.TotalDistance = tourLogs.TotalDistance;

@@ -53,7 +53,7 @@ export class TourForm {
         if (type === 'from') this.fromValid.set(false);
         else this.toValid.set(false);
       }
-    }, 500); // debounce
+    }, 500);
   }
 
   async createRoutes() {
@@ -101,7 +101,6 @@ export class TourForm {
     await this.createRoutes();
 
     this.tourService.tourAdded.next(this.route);
-    // Notify the map component to update the route
 
     this.tourService.createTour(this.newTour).subscribe({
       next: (tour) => {

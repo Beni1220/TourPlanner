@@ -12,11 +12,11 @@ export class OpenrouteService {
       `https://api.openrouteservice.org/geocode/search?api_key=${this.apiKey}&text=${encodeURIComponent(place)}`
     );
 
-      if (!response.ok) {
-    const errorText = await response.text();
-    console.error('ORS Geocode Fehler:', errorText);
-    throw new Error('Fehler bei Geocoding API');
-  }
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('ORS Geocode Fehler:', errorText);
+      throw new Error('Fehler bei Geocoding API');
+    }
 
     const data = await response.json();
 
@@ -26,7 +26,6 @@ export class OpenrouteService {
 
     const coords = data.features[0].geometry.coordinates;
 
-    // 🔥 extra safety check
     if (!coords || coords.length < 2) {
       throw new Error('Ungültige Koordinaten');
     }

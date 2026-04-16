@@ -1,8 +1,6 @@
-// tour.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-
 
 export interface Tour {
   id?: number;

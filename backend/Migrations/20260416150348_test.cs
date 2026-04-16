@@ -30,6 +30,25 @@ namespace backend.Migrations
                 {
                     table.PrimaryKey("PK_TourLogs", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Tours",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    From = table.Column<string>(type: "text", nullable: false),
+                    To = table.Column<string>(type: "text", nullable: false),
+                    TransportType = table.Column<string>(type: "text", nullable: false),
+                    TourDistance = table.Column<double>(type: "double precision", nullable: false),
+                    EstimatedTime = table.Column<double>(type: "double precision", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tours", x => x.Id);
+                });
         }
 
         /// <inheritdoc />
@@ -37,6 +56,9 @@ namespace backend.Migrations
         {
             migrationBuilder.DropTable(
                 name: "TourLogs");
+
+            migrationBuilder.DropTable(
+                name: "Tours");
         }
     }
 }
