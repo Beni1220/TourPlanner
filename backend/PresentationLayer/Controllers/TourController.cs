@@ -21,7 +21,7 @@ public class TourController : ControllerBase
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(ModelState); // 🔥 zeigt dir EXAKT den Fehler
+            return BadRequest(ModelState); 
         }
 
         var createdTour = _service.CreateTour(tour);
