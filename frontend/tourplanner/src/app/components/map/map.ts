@@ -3,14 +3,6 @@ import * as L from 'leaflet';
 import { TourService } from '../../services/tour.services';
 
 
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'assets/marker-icon-2x.png',
-  iconUrl: 'assets/marker-icon.png',
-  shadowUrl: 'assets/marker-shadow.png',
-});
-
 @Component({
   selector: 'app-map',
   templateUrl: './map.html',
@@ -24,13 +16,21 @@ export class MapComponent implements AfterViewInit {
 
 
   ngAfterViewInit(): void {
+    
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: 'assets/marker-icon-2x.png',
+      iconUrl: 'assets/marker-icon.png',
+      shadowUrl: 'assets/marker-shadow.png',
+    });
+
     this.initMap();
   }
 
   constructor(private tourService: TourService) {}
   
   ngOnInit() {
-    this.tourService.tourAdded.subscribe(coordinates => {
+    this.tourService.tourRouteAdded.subscribe(coordinates => {
       this.getRoute(coordinates);
     });
   }
@@ -39,7 +39,8 @@ export class MapComponent implements AfterViewInit {
     this.map = L.map('map').setView([48.2082, 16.3738], 13); // Wien
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
+      attribution: '&copy; OpenStreetMap contributors',
+      crossOrigin: ''
     }).addTo(this.map);
   }
 
@@ -73,14 +74,16 @@ export class MapComponent implements AfterViewInit {
       style: { color: 'blue', weight: 5 }
     }).addTo(this.map);
 
+    const bounds = this.routeLayer!.getBounds();
+    this.map.fitBounds(bounds);
+
     // route.addTo(this.map);
 
     this.markers.push(
-      L.marker(newRoute[0]).addTo(this.map).bindPopup('Start')
+      L.marker([newRoute[0][1], newRoute[0][0]]).addTo(this.map).bindPopup('Start')
     );
-
     this.markers.push(
-      L.marker(newRoute[1]).addTo(this.map).bindPopup('Ziel')
+      L.marker([newRoute[1][1], newRoute[1][0]]).addTo(this.map).bindPopup('Ziel')
     );
   }
 

@@ -14,7 +14,6 @@ import { TourLogs } from './components/tour-logs/tour-logs';
   styleUrl: './app.css'
 })
 export class App {
-  
 
   
 }

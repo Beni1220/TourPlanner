@@ -1,7 +1,9 @@
-<body>  
-      <div *ngIf="error()" class="toast error-toast">
-        {{ error() }}
-      </div>
+<body>
+      @if (error()) {
+        <div class="toast error-toast">
+          {{ error() }}
+        </div>
+      }
     <section class="create-card">
        
         <div class="card-header">
@@ -36,15 +38,23 @@
           <div class="form-col">
             <label>From</label>
             <input type="text" [(ngModel)]="newTour.from" (ngModelChange)="validatePlace($event, 'from')" />
-            <p *ngIf="fromValid() === false" class="error">Ort nicht gefunden</p>
-            <p *ngIf="fromValid() === true" class="success">✔ gefunden</p>
+            @if (fromValid() === false) {
+              <p class="error">Ort nicht gefunden</p>
+            }
+            @if (fromValid() === true) {
+              <p class="success">✔ gefunden</p>
+            }
           </div>
 
           <div class="form-col">
             <label>To</label>
             <input type="text" [(ngModel)]="newTour.to" (ngModelChange)="validatePlace($event, 'to')" />
-            <p *ngIf="toValid() === false" class="error">Ort nicht gefunden</p>
-            <p *ngIf="toValid() === true" class="success">✔ gefunden</p>
+            @if (toValid() === false) {
+              <p class="error">Ort nicht gefunden</p>
+            }
+            @if (toValid() === true) {
+              <p class="success">✔ gefunden</p>
+            }
           </div>
         </div>
 
@@ -71,40 +81,40 @@
         </div>
 
         <div class="tour-grid">
-          <article *ngFor="let tour of tours()" class="tour-card" (click)="selectTour(tour)">
-            <ng-container *ngIf="editingTour?.id === tour.id; then editMode else viewMode"></ng-container>
-
-            <ng-template #editMode>
-              <div class="card-row" *ngIf="editingTour as currentEdit">
-                <input type="text" [(ngModel)]="currentEdit.name" />
-                <input type="text" [(ngModel)]="currentEdit.description" />
-                <select [(ngModel)]="currentEdit.transportType">
-                  <option>Bike</option>
-                  <option>Hike</option>
-                  <option>Running</option>
-                  <option>Vacation</option>
-                </select>
-                <input type="text" [(ngModel)]="currentEdit.from" />
-                <input type="text" [(ngModel)]="currentEdit.to" />
-              </div>
-              <div class="card-row" *ngIf="editingTour as currentEdit">
-                <input type="number" min="0" [(ngModel)]="currentEdit.estimatedTime" />
-              </div>
-              <div class="card-actions">
-                <button class="secondary-button" (click)="saveEdit()">Speichern</button>
-                <button class="danger-button" (click)="cancelEdit()">Abbrechen</button>
-              </div>
-            </ng-template>
-
-            <ng-template #viewMode>
-              <div class="tour-title">{{ tour.name }}</div>
-              <div class="tour-meta">{{ tour.transportType }} · {{ tour.from }} from · {{ tour.to }} to</div>
-              <div class="card-actions">
-                <button class="secondary-button" (click)="startEdit(tour)">Bearbeiten</button>
-                <button class="danger-button" (click)="deleteTour(tour.id!)">Löschen</button>
-              </div>
-            </ng-template>
-          </article>
+          @for (tour of tours(); track tour.id) {
+            <article class="tour-card" (click)="selectTour(tour)">
+              @if (editingTour?.id === tour.id) {
+                @if (editingTour; as currentEdit) {
+                  <div class="card-row">
+                    <input type="text" [(ngModel)]="currentEdit.name" />
+                    <input type="text" [(ngModel)]="currentEdit.description" />
+                    <select [(ngModel)]="currentEdit.transportType">
+                      <option>Bike</option>
+                      <option>Hike</option>
+                      <option>Running</option>
+                      <option>Vacation</option>
+                    </select>
+                    <input type="text" [(ngModel)]="currentEdit.from" />
+                    <input type="text" [(ngModel)]="currentEdit.to" />
+                  </div>
+                  <div class="card-row">
+                    <input type="number" min="0" [(ngModel)]="currentEdit.estimatedTime" />
+                  </div>
+                  <div class="card-actions">
+                    <button class="secondary-button" (click)="saveEdit()">Speichern</button>
+                    <button class="danger-button" (click)="cancelEdit()">Abbrechen</button>
+                  </div>
+                }
+              } @else {
+                <div class="tour-title">{{ tour.name }}</div>
+                <div class="tour-meta">{{ tour.transportType }} · {{ tour.from }} from · {{ tour.to }} to</div>
+                <div class="card-actions">
+                  <button class="secondary-button" (click)="startEdit(tour)">Bearbeiten</button>
+                  <button class="danger-button" (click)="deleteTour(tour.id!)">Löschen</button>
+                </div>
+              }
+            </article>
+          }
         </div>
       </section>
 </body>

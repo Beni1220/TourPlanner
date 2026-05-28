@@ -76,7 +76,7 @@ export class TourForm {
 
       const route: [[number, number], [number, number]] = [from, to];
 
-      this.tourService.tourAdded.next(route);
+      this.tourService.tourRouteAdded.next(route);
 
     } catch (err) {
       console.error('Fehler beim Laden der Route:', err);
@@ -100,7 +100,7 @@ export class TourForm {
 
     await this.createRoutes();
 
-    this.tourService.tourAdded.next(this.route);
+    this.tourService.tourRouteAdded.next(this.route);
 
     this.tourService.createTour(this.newTour).subscribe({
       next: (tour) => {

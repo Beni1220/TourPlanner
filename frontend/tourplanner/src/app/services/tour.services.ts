@@ -38,6 +38,6 @@ export class TourService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  tourAdded = new Subject<[[number, number], [number, number]]>();
+  tourRouteAdded = new Subject<[[number, number], [number, number]]>();
 
 }
