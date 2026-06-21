@@ -32,6 +32,7 @@
                 existingTour.TransportType = tour.TransportType;
                 //existingTour.estimatedTime = tour.estimatedTime; wird automatisch von api berechnet?
                 //existingTour.routeInformation = tour.routeInformation; graphical display für die route
+                existingTour.TourLogs = tour.TourLogs;
                 _context.SaveChanges();
             }
         }

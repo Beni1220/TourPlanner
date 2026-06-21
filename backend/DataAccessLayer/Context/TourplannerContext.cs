@@ -8,5 +8,6 @@ public class TourPlannerContext : DbContext
 
     public DbSet<Tour> Tours { get; set; }
     public DbSet<TourLogs> TourLogs { get; set; }
+    public DbSet<TourCoordinate> TourCoordinates { get; set; }
     
 }

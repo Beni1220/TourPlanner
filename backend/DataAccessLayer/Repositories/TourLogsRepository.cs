@@ -32,6 +32,7 @@
                 existingTourLog.TotalDistance = tourLogs.TotalDistance;
                 existingTourLog.TotalTime = tourLogs.TotalTime;
                 existingTourLog.Rating = tourLogs.Rating;
+                existingTourLog.TourId = tourLogs.TourId;
                 _context.SaveChanges();
             }
         }

@@ -9,4 +9,9 @@ public class Tour
     public required double TourDistance{ get; set; }
     public required double EstimatedTime{ get; set; }
     //public required string routeInformation { get; set; }
+
+    // tourlogs
+    public List<TourLogs> TourLogs { get; set; } = new List<TourLogs>();
+    // tour coordinates
+    public List<TourCoordinate> TourCoordinates { get; set; } = new List<TourCoordinate>();
 }
