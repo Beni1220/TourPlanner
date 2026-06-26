@@ -14,4 +14,6 @@ public class Tour
     public List<TourLogs> TourLogs { get; set; } = new List<TourLogs>();
     // tour coordinates
     public List<TourCoordinate> TourCoordinates { get; set; } = new List<TourCoordinate>();
+
+    public int UserId { get; set; }
 }

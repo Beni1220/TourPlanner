@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TourPlanner.PresentationLayer.Controllers
 {
-    /*
     [ApiController]
     [Route("api/[controller]")]
     public class TourCoordinatesController : ControllerBase
@@ -14,66 +13,49 @@ namespace TourPlanner.PresentationLayer.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public IActionResult GetAll()
+        [HttpGet("{tourId}")]
+        public IActionResult GetByTourId(int tourId)
         {
-            var tourCoordinates = _service.GetCoordinatesByTourId(tourId: 1); // Replace with actual tour ID
+            var tourCoordinates = _service.GetCoordinatesByTourId(tourId);
+
+            if (!tourCoordinates.Any())
+            {
+                return NotFound();
+            }
+
             return Ok(tourCoordinates);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
-        {
-            var tourCoordinate = _service.GetTourCoordinateById(id);
-            if (tourCoordinate == null)
-            {
-                return NotFound();
-            }
-            return Ok(tourCoordinate);
-        }
-
         [HttpPost]
-        public IActionResult Create(TourCoordinate tourCoordinate)
+        public IActionResult Create([FromBody] IEnumerable<TourCoordinate> tourCoordinates)
         {
-            if (tourCoordinate == null)
+            if (tourCoordinates == null || !tourCoordinates.Any())
             {
                 return BadRequest();
             }
 
-            _service.CreateTourCoordinate(tourCoordinate);
-            return CreatedAtAction(nameof(GetById), new { id = tourCoordinate.Id }, tourCoordinate);
+            _service.CreateTourCoordinates(tourCoordinates);
+
+            return CreatedAtAction(
+                nameof(GetByTourId),
+                new { tourId = tourCoordinates.First().TourId },
+                tourCoordinates
+            );
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, TourCoordinate tourCoordinate)
+        [HttpDelete("{tourId}")]
+        public IActionResult Delete(int tourId)
         {
-            if (tourCoordinate == null || id != tourCoordinate.Id)
-            {
-                return BadRequest();
-            }
+            var coords = _service.GetCoordinatesByTourId(tourId);
 
-            var existing = _service.GetTourCoordinateById(id);
-            if (existing == null)
+            if (!coords.Any())
             {
                 return NotFound();
             }
 
-            _service.UpdateTourCoordinate(tourCoordinate);
-            return NoContent();
-        }
+            _service.DeleteTourCoordinatesByTourId(tourId);
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            var existing = _service.GetTourCoordinateById(id);
-            if (existing == null)
-            {
-                return NotFound();
-            }
-
-            _service.DeleteTourCoordinate(id);
             return NoContent();
         }
     }
-    */
 }

@@ -1,3 +1,5 @@
+
+
 public class TourCoordinateRepository : ITourCoordinateRepository
 {
     private readonly TourPlannerContext _context;
@@ -23,6 +25,10 @@ public class TourCoordinateRepository : ITourCoordinateRepository
         _context.SaveChanges();
     }
 
+    public bool DoesTourCoordinateExist(int tourId)
+    {
+        return _context.TourCoordinates.Any(tc => tc.TourId == tourId);
+    }
 
     public void DeleteTourCoordinate(int id)
     {
@@ -33,4 +39,14 @@ public class TourCoordinateRepository : ITourCoordinateRepository
             _context.SaveChanges();
         }
     }
+
+    public void DeleteTourCoordinatesByTourId(int tourId)
+{
+    var coords = _context.TourCoordinates
+        .Where(tc => tc.TourId == tourId)
+        .ToList();
+
+    _context.TourCoordinates.RemoveRange(coords);
+    _context.SaveChanges();
+}
 }

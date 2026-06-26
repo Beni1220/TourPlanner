@@ -17,6 +17,7 @@ export class TourForm {
   editingTour: Tour | null = null;
 
   newTour: Tour = {
+    id: undefined,
     name: '',
     description: '',
     from: '',
@@ -25,7 +26,6 @@ export class TourForm {
     tourDistance: 0,
     estimatedTime: 0,
   };
-  route: [[number, number], [number, number]] = [[0, 0], [0, 0]];
 
   fromValid = signal<boolean | null>(null);
   toValid = signal<boolean | null>(null);
@@ -43,45 +43,33 @@ export class TourForm {
     }
 
     setTimeout(async () => {
-      try {
-        await this.openRouteService.getCoordinates(place);
-
-        if (type === 'from') this.fromValid.set(true);
-        else this.toValid.set(true);
-
-      } catch {
-        if (type === 'from') this.fromValid.set(false);
-        else this.toValid.set(false);
-      }
+      const valid = await this.openRouteService.validatePlace(place);
+      if (type === 'from') this.fromValid.set(valid);
+      else this.toValid.set(valid);
     }, 500);
   }
 
-  async createRoutes() {
-    try {
-      const from = await this.openRouteService.getCoordinates(this.newTour.from);
-      const to = await this.openRouteService.getCoordinates(this.newTour.to);
-
-      //this.route = [[from[0], from[1]], [to[0], to[1]]];
-      this.route = [from, to];
-
-    } catch (err) {
-      console.error(err);
-    }
-  }
+  
 
   async selectTour(tour: Tour) {
-    try {
-      const from = await this.openRouteService.getCoordinates(tour.from);
-      const to = await this.openRouteService.getCoordinates(tour.to);
 
-      const route: [[number, number], [number, number]] = [from, to];
+    try {
+
+      const route = await this.openRouteService.getRoute(
+        tour.from,
+        tour.to,
+        tour.id!
+      );
 
       this.tourService.tourRouteAdded.next(route);
 
     } catch (err) {
-      console.error('Fehler beim Laden der Route:', err);
+
+      console.error(err);
       this.error.set('Route konnte nicht geladen werden');
+
     }
+
   }
 
   loadTours(): void {
@@ -93,30 +81,50 @@ export class TourForm {
 
 
   async addTour(): Promise<void> {
+
     if (!this.newTour.name.trim()) {
       this.error.set('Bitte Name eingeben!');
       return;
     }
 
-    await this.createRoutes();
-
-    this.tourService.tourRouteAdded.next(this.route);
-
     this.tourService.createTour(this.newTour).subscribe({
-      next: (tour) => {
-        this.tours.update(t => [...t, tour]);
-        this.resetNewTour();
-        this.error.set('');
+
+      next: async (tour) => {
+
+        try {
+
+          const route = await this.openRouteService.getRoute(
+            tour.from,
+            tour.to,
+            tour.id!
+          );
+
+          this.tourService.tourRouteAdded.next(route);
+
+          this.tours.update(list => [...list, tour]);
+
+          this.resetNewTour();
+
+          this.fromValid.set(null);
+          this.toValid.set(null);
+
+          this.error.set('');
+
+        } catch (err) {
+
+          console.error(err);
+          this.error.set('Route konnte nicht erstellt werden');
+
+        }
+
       },
-      error: (err) => this.error.set('Fehler beim Erstellen: ' + err.message)
-      
-      
+
+      error: err =>
+        this.error.set('Fehler beim Erstellen: ' + err.message)
+
     });
-   
-    this.fromValid.set(null);
-    this.toValid.set(null);
-    //this.mapComponent.getRoute(this.route);
-  }
+
+}
 
   startEdit(tour: Tour): void {
     this.editingTour = { ...tour };

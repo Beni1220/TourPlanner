@@ -14,6 +14,7 @@
 
         public Tour Create(Tour tour)
         {
+            tour.UserId = 4; // Set the UserId to 4 for now, as we don't have user management implemented yet
             _context.Tours.Add(tour);
             _context.SaveChanges();
             Console.WriteLine($"Tour created with ID: {tour.Id}");

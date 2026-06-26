@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     [DbContext(typeof(TourPlannerContext))]
-    partial class TourPlannerContextModelSnapshot : ModelSnapshot
+    [Migration("20260626134255_UserInDALAdded")]
+    partial class UserInDALAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,9 +125,14 @@ namespace backend.Migrations
                     b.Property<int>("TourId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("userId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TourId");
+
+                    b.HasIndex("userId");
 
                     b.ToTable("TourLogs");
                 });
@@ -181,6 +189,12 @@ namespace backend.Migrations
                         .HasForeignKey("TourId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("User", null)
+                        .WithMany("TourLogs")
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Tour", b =>
@@ -192,6 +206,8 @@ namespace backend.Migrations
 
             modelBuilder.Entity("User", b =>
                 {
+                    b.Navigation("TourLogs");
+
                     b.Navigation("Tours");
                 });
 #pragma warning restore 612, 618

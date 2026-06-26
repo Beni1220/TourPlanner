@@ -8,4 +8,5 @@ public class TourLogs
     public double TotalDistance { get; set; }
     public double TotalTime { get; set; }
     public double Rating { get; set; }
+
 }

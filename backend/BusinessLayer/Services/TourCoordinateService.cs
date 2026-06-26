@@ -18,9 +18,18 @@ public class TourCoordinateService : ITourCoordinateService
         _repository.CreateTourCoordinates(tourCoordinates);
     }
 
+    public bool DoesTourCoordinateExist(int id)
+    {
+        return _repository.DoesTourCoordinateExist(id);
+    }
 
     public void DeleteTourCoordinate(int id)
     {
         _repository.DeleteTourCoordinate(id);
+    }
+
+    public void DeleteTourCoordinatesByTourId(int tourId)
+    {
+        _repository.DeleteTourCoordinatesByTourId(tourId);
     }
 }

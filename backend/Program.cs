@@ -25,6 +25,8 @@ builder.Services.AddScoped<ITourLogsRepository, TourLogsRepository>();
 builder.Services.AddScoped<ITourLogsService, TourLogsService>();
 builder.Services.AddScoped<ITourCoordinateRepository, TourCoordinateRepository>();
 builder.Services.AddScoped<ITourCoordinateService, TourCoordinateService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
