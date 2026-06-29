@@ -1,28 +1,36 @@
-<body> 
-  
-    <main class="app-shell">
-      
-      <section class="hero-panel">
-        <div> 
-          
-          <span class="eyebrow">Tour Planner</span>
-          <h1>Deine Touren verwalten</h1>
-          <p>Min = Minuten, km = Kilometer. Erstelle, bearbeite oder lösche deine Touren direkt hier.</p>
-        </div>
-      </section>
-      
-      <section class="map-section">
-        <app-map></app-map>    
-      </section>
-      <br>
-      
-      <section>
-        <app-tour-form></app-tour-form>
-      </section>
+<main class="app-shell">
 
-      <section>
-        <app-tour-logs></app-tour-logs>
-      </section>
-      
-    </main>
-</body>
+  <section class="hero-panel">
+    <div>
+      <span class="eyebrow">Tour Planner</span>
+      <h1>Deine Touren verwalten</h1>
+      <p>Min = Minuten, km = Kilometer. Erstelle, bearbeite oder lösche deine Touren direkt hier.</p>
+    </div>
+
+    <button class="login-trigger" (click)="showLogin = true">
+      Sign in
+    </button>
+  </section>
+
+  <section class="map-section">
+    <app-map></app-map>
+  </section>
+  <br>
+
+  <section>
+    <app-tour-form></app-tour-form>
+  </section>
+  <section>
+    <app-tour-logs></app-tour-logs>
+  </section>
+
+</main>
+
+@if (showLogin) {
+  <div class="modal-backdrop" (click)="showLogin = false">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="showLogin = false">✕</button>
+      <app-user></app-user>
+    </div>
+  </div>
+}

@@ -8,6 +8,11 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
+    public async Task<bool> UsernameExists(string Username)
+    {
+        return await _context.Users.AnyAsync(u => u.Username == Username);
+    }
+
     public async Task<User> GetUserByIdAsync(int id)
     {
         return await _context.Users.FindAsync(id);
@@ -40,4 +45,18 @@ public class UserRepository : IUserRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task<User> RegisterUserAsync(User user)
+    {
+        var newUser = new User
+        {
+            Username = user.Username,
+            Password = user.Password
+        };
+
+        await _context.Users.AddAsync(user);
+        await _context.SaveChangesAsync();
+        return newUser;
+    }
+
 }

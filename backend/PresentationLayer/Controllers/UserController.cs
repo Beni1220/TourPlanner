@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 [ApiController]
 [Route("api/users")]
@@ -8,6 +9,19 @@ public class UserController : ControllerBase
     public UserController(IUserService service)
     {
         _service = service;
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] User user)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState); 
+        }
+
+        Console.WriteLine($"user: {user}");
+        var createdUser = await _service.RegisterUserAsync(user);
+        return Created($"api/users/{createdUser.Id}", createdUser);
     }
 
     [HttpGet]
@@ -23,13 +37,14 @@ public class UserController : ControllerBase
         {
             return BadRequest(ModelState); 
         }
+        
 
         var createdUser = await _service.AddUserAsync(user);
         return Created($"api/users/{createdUser.Id}", createdUser);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, User user)
+    public async Task<IActionResult> Update(int id,[FromBody] User user)
     {
         if (id != user.Id)
         {
