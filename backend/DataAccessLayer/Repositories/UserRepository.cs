@@ -8,9 +8,14 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<bool> UsernameExists(string Username)
+    public async Task<User> GetUserByUsernameAsync(string Username)
     {
-        return await _context.Users.AnyAsync(u => u.Username == Username);
+        return await _context.Users.FirstOrDefaultAsync(u => u.Username == Username);
+    }
+
+    public async Task<bool> UsernameExistsAsync(string username)
+    {
+        return await _context.Users.AnyAsync(u => u.Username == username);
     }
 
     public async Task<User> GetUserByIdAsync(int id)
@@ -58,5 +63,7 @@ public class UserRepository : IUserRepository
         await _context.SaveChangesAsync();
         return newUser;
     }
+
+    
 
 }

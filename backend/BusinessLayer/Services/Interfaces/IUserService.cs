@@ -1,5 +1,7 @@
 public interface IUserService
 {
+    Task<User> GetUserByUsernameAsync(string username);
+
     Task<bool> UsernameExists(string username);
     Task<User> GetUserByIdAsync(int id);
     Task<IEnumerable<User>> GetAllUsersAsync();
@@ -7,5 +9,6 @@ public interface IUserService
     Task UpdateUserAsync(User user);
     Task DeleteUserAsync(int id);
 
-    Task<User> RegisterUserAsync(User user);
+    Task<string> RegisterUserAsync(User user);
+    Task<string> LoginUserAsync(User user);
 }

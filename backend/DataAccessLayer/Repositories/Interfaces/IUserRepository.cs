@@ -1,6 +1,7 @@
 public interface IUserRepository
 {
-    Task<bool> UsernameExists(string username);
+    Task<User> GetUserByUsernameAsync(string username);
+    Task<bool> UsernameExistsAsync(string username);
     Task<User> GetUserByIdAsync(int id);
     Task<IEnumerable<User>> GetAllUsersAsync();
     Task<User> AddUserAsync(User user);

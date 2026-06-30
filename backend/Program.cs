@@ -27,6 +27,7 @@ builder.Services.AddScoped<ITourCoordinateRepository, TourCoordinateRepository>(
 builder.Services.AddScoped<ITourCoordinateService, TourCoordinateService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<TokenService>();
 
 var app = builder.Build();
 
@@ -37,6 +38,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowAngular");
+app.UseAuthorization();
 
 
 // app.MapGet("/api/ping", () => Results.Json(new { message = "Hallo aus dem Backend!", timestamp = DateTime.UtcNow }));
