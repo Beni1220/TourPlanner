@@ -8,7 +8,7 @@ public class User
     public required string Username { get; set; }
 
     [JsonPropertyName("password")]
-    public string Password { get; set; }
+    public required string Password { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime LastLoginAt { get; set; }
     public List<Tour> Tours { get; set; } = new List<Tour>();

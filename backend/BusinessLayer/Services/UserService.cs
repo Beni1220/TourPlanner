@@ -12,7 +12,7 @@ public class UserService : IUserService
     public async Task<bool> UsernameExists(string Username)
     {
         if (string.IsNullOrWhiteSpace(Username))
-            throw new ArgumentException("Username already exists.");
+            throw new ArgumentException("Username darf nicht leer sein.");
         return await _userRepository.UsernameExistsAsync(Username);
     }
     
@@ -29,10 +29,9 @@ public class UserService : IUserService
         return await _userRepository.GetAllUsersAsync();
     }
 
+    // löschen
     public async Task<User> AddUserAsync(User user)
     {
-        if (await _userRepository.UsernameExistsAsync(user.Username))
-            throw new InvalidOperationException("Username already exists.");
         ValidateUser(user);
         return await _userRepository.AddUserAsync(user);
     }
@@ -54,21 +53,16 @@ public class UserService : IUserService
 
     public async Task<string> RegisterUserAsync(User user)
     {
-        if (string.IsNullOrWhiteSpace(user.Username))
-            throw new ArgumentException("Username cannot be empty.");
-        if (string.IsNullOrWhiteSpace(user.Password))
-            throw new ArgumentException("Password cannot be empty.");
-        if (await _userRepository.UsernameExistsAsync(user.Username))
-            throw new InvalidOperationException("Username already exists.");
-
+        
         var newUser = new User
         {
             Username = user.Username,
             Password = user.Password,
             CreatedAt = DateTime.UtcNow
         };
-
+        
         ValidateUser(newUser);
+        
         
         await _userRepository.AddUserAsync(newUser);
         return await LoginUserAsync(newUser);
@@ -76,25 +70,24 @@ public class UserService : IUserService
 
     public async Task<string> LoginUserAsync(User user)
     {
+
         if (string.IsNullOrWhiteSpace(user.Username) || string.IsNullOrWhiteSpace(user.Password))
-            throw new ArgumentException("Username or Password cannot be empty.");
+            throw new ArgumentException("Username and password cannot be empty.");
 
         User userFromDb = await _userRepository.GetUserByUsernameAsync(user.Username);
-        if (userFromDb != null)
-        {
+        
+        if (userFromDb == null)
+            throw new UnauthorizedAccessException("Invalid username or password.");
             
-            if (userFromDb.Password != user.Password)
-                throw new UnauthorizedAccessException("Invalid username or password.");
-            
-            var token = _tokenService.GenerateToken(user.Id, user.Username);
+        if (userFromDb.Password != user.Password || userFromDb.Username != user.Username)
+            throw new UnauthorizedAccessException("Invalid username or password.");
+        
+        var token = _tokenService.GenerateToken(userFromDb.Id, userFromDb.Username);
 
-            return token;
+        return token;
 
-        } 
-        else
-        {
-            throw new UnauthorizedAccessException("user existiert nicht.");
-        }
+        
+       
       
     }
 
@@ -120,5 +113,7 @@ public class UserService : IUserService
             throw new ArgumentException("Password must be at least 6 characters.");
         if (user.CreatedAt == default)
             throw new ArgumentException("CreatedAt must be set.");
+        if (_userRepository.UsernameExistsAsync(user.Username).Result)
+            throw new InvalidOperationException("Username already exists.");
     }
 }

@@ -20,6 +20,7 @@ public class UserController : ControllerBase
         }
 
         Console.WriteLine($"user: {user}");
+        // returnt den Token
         var loggedInUserToken = await _service.RegisterUserAsync(user);
 
         string jsonString = JsonSerializer.Serialize(loggedInUserToken);
@@ -37,8 +38,8 @@ public class UserController : ControllerBase
     {
         var loggedInUserToken = await _service.LoginUserAsync(user);
 
-        string jsonString = JsonSerializer.Serialize(loggedInUserToken);
-        return Ok(jsonString);
+        string token = JsonSerializer.Serialize(loggedInUserToken);
+        return Ok(new { token });
     }
 
     [HttpGet]
@@ -47,6 +48,8 @@ public class UserController : ControllerBase
         return Ok(await _service.GetAllUsersAsync());
     }
 
+
+    // löschen
     [HttpPost]
     public async Task<IActionResult> Create(User user)
     {
@@ -59,6 +62,8 @@ public class UserController : ControllerBase
         var createdUser = await _service.AddUserAsync(user);
         return Created($"api/users/{createdUser.Id}", createdUser);
     }
+
+    // Read User methode hinzufügen
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id,[FromBody] User user)

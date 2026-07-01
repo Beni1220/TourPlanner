@@ -51,6 +51,8 @@ public class UserRepository : IUserRepository
         }
     }
 
+
+    // löschen und in addUserAsync weiter arbeiten
     public async Task<User> RegisterUserAsync(User user)
     {
         var newUser = new User
