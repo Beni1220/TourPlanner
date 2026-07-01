@@ -22,14 +22,10 @@ public class UserController : ControllerBase
         Console.WriteLine($"user: {user}");
         // returnt den Token
         var loggedInUserToken = await _service.RegisterUserAsync(user);
-
-        string jsonString = JsonSerializer.Serialize(loggedInUserToken);
-
         User userFromDb = await _service.GetUserByUsernameAsync(user.Username);
 
-
         // jsonString nicht als Location URI verwenden, sondern die URL des neu erstellten Benutzers zurückgeben
-        return Created($"api/users/{userFromDb.Id}", jsonString);
+        return Created($"api/users/{userFromDb.Id}", new { token = loggedInUserToken });
 
     }
 
@@ -37,9 +33,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Login([FromBody] User user)
     {
         var loggedInUserToken = await _service.LoginUserAsync(user);
-
-        string token = JsonSerializer.Serialize(loggedInUserToken);
-        return Ok(new { token });
+        return Ok(new { loggedInUserToken });
     }
 
     [HttpGet]

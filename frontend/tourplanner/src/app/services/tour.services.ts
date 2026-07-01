@@ -27,7 +27,8 @@ export class TourService {
   }
 
   createTour(tour: Tour): Observable<Tour> {
-    return this.http.post<Tour>(this.apiUrl, tour);
+    const token = localStorage.getItem('token'); // Retrieve the token from local storage
+    return this.http.post<Tour>(this.apiUrl, tour, {headers: { Authorization: `Bearer ${token}`}});
   }
 
   updateTour(tour: Tour): Observable<void> {

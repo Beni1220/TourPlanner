@@ -51,6 +51,8 @@ public class TokenService
             if (!_activeTokens.Contains(token))
                 return null;
 
+            Console.WriteLine("Token gibt es");
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var validationParams = new TokenValidationParameters
             {
@@ -78,9 +80,13 @@ public class TokenService
             if (string.IsNullOrWhiteSpace(authHeader))
                 return 0;
 
+            Console.WriteLine("Check 1");
+
             var parts = authHeader.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length != 2 || !parts[0].Equals("Bearer", StringComparison.OrdinalIgnoreCase))
                 return 0;
+
+            Console.WriteLine("Check 2");
 
             string token = parts[1];
 
@@ -88,10 +94,13 @@ public class TokenService
             if (principal == null)
                 return 0;
 
+            Console.WriteLine("Check 3");
             // Find claim "userId"
             var userIdClaim = principal.Claims.FirstOrDefault(c => c.Type == "userId");
             if (userIdClaim == null)
                 return 0;
+
+            Console.WriteLine("Check 4");
 
             if (int.TryParse(userIdClaim.Value, out int userId))
                 return userId;

@@ -6,6 +6,7 @@ import { MapComponent } from './components/map/map';
 import { TourForm } from './components/tour-form/tour-form';
 import { TourLogs } from './components/tour-logs/tour-logs';
 import { User } from './components/user/user';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,7 @@ import { User } from './components/user/user';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
+
 export class App {
-  showLogin = false;
-  
+  constructor(public auth: AuthService) {}
 }

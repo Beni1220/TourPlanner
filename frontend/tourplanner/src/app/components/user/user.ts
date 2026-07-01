@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-user',
@@ -17,12 +18,13 @@ export class User {
   loginForm = { username: '', password: '' };
   registerForm = { username: '', password: '' };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, public auth: AuthService) {}
 
   login() {
     this.http.post('/api/users/login', this.loginForm).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.token);
+        this.auth.close(); 
       },
       error: (err) => console.error(err)
     });
@@ -30,7 +32,10 @@ export class User {
 
   register() {
     this.http.post('/api/users/register', this.registerForm).subscribe({
-      next: () => this.activeTab = 'login',
+      next: (res: any) => {
+        localStorage.setItem('token', res.token);
+        this.auth.close();
+      },
       error: (err) => console.error(err)
     });
   }

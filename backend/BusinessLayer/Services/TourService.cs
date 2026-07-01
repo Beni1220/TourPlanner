@@ -12,11 +12,11 @@ public class TourService : ITourService
         return _repository.GetAll();
     }
 
-    public Tour CreateTour(Tour tour)
+    public Tour CreateTour(Tour tour, int userId)
     {
         ValidateTour(tour);
 
-        return _repository.Create(tour);
+        return _repository.Create(tour, userId);
     }
 
     public void UpdateTour(Tour tour)

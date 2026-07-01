@@ -9,7 +9,10 @@
 
 /* ── Card ── */
 .auth-card {
+  position: relative;
   width: 380px;
+  padding: 32px;
+  padding-top: 70px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
@@ -50,7 +53,7 @@
 
 /* ── Form Header ── */
 .form-header {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .form-header h2 {
@@ -270,4 +273,24 @@
   font-size: 11px;
   color: rgba(255, 255, 255, 0.45);
   min-width: 36px;
+}
+
+/* Close Button */
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;  /* links */
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background 0.15s;
 }

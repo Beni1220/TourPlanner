@@ -75,7 +75,7 @@ export class TourForm {
   loadTours(): void {
     this.tourService.getTours().subscribe({
       next: (tours) => this.tours.set(tours),
-      error: (err) => this.error.set('Fehler beim Laden der Touren: ' + err.message)
+      error: (err) => this.error.set(this.getErrorMessage(err))
     });
   }
 
@@ -120,7 +120,7 @@ export class TourForm {
       },
 
       error: err =>
-        this.error.set('Fehler beim Erstellen: ' + err.message)
+        this.error.set(this.getErrorMessage(err))
 
     });
 
@@ -151,7 +151,7 @@ export class TourForm {
         this.editingTour = null;
         this.error.set('');
       },
-      error: (err) => this.error.set('Fehler beim Aktualisieren: ' + err.message)
+      error: (err) => this.error.set(this.getErrorMessage(err))
     });
   }
 
@@ -164,7 +164,7 @@ export class TourForm {
         }
         this.error.set('');
       },
-      error: (err) => this.error.set('Fehler beim Löschen: ' + err.message)
+      error: (err) => this.error.set(this.getErrorMessage(err))
     });
   }
 
@@ -178,5 +178,14 @@ export class TourForm {
       estimatedTime: 0,
       tourDistance: 0,
     };
+  }
+
+  private getErrorMessage(err: any): string {
+    if (err.error?.message) return err.error.message;
+    if (err.error?.errors) {
+      return (Object.values(err.error.errors).flat() as string[]).join(', ');
+    }
+    if (err.error?.title) return err.error.title;
+    return err.message;
   }
 }

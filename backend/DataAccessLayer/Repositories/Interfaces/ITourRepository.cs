@@ -3,7 +3,7 @@ public interface ITourRepository
 
     // Tour CRUD
     List<Tour> GetAll();
-    Tour Create(Tour tour);
+    Tour Create(Tour tour, int userId);
 
     void Update(Tour tour);
 

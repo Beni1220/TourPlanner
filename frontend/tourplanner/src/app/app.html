@@ -7,9 +7,15 @@
       <p>Min = Minuten, km = Kilometer. Erstelle, bearbeite oder lösche deine Touren direkt hier.</p>
     </div>
 
-    <button class="login-trigger" (click)="showLogin = true">
-      Sign in
-    </button>
+    <button class="login-trigger" (click)="auth.open()">Sign in</button>
+
+    @if (auth.showLogin()) {
+      <div class="modal-backdrop" (click)="auth.close()">
+        <div class="modal-box" (click)="$event.stopPropagation()">
+          <app-user></app-user>
+        </div>
+      </div>
+    }
   </section>
 
   <section class="map-section">
@@ -25,12 +31,3 @@
   </section>
 
 </main>
-
-@if (showLogin) {
-  <div class="modal-backdrop" (click)="showLogin = false">
-    <div class="modal-box" (click)="$event.stopPropagation()">
-      <button class="modal-close" (click)="showLogin = false">✕</button>
-      <app-user></app-user>
-    </div>
-  </div>
-}
