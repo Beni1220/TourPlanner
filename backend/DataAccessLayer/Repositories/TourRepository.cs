@@ -15,6 +15,7 @@
         public Tour Create(Tour tour, int userId)
         {
             tour.UserId = userId; // Set the UserId to the provided value
+            // tour.TourDistance = 20; // Placeholder value, replace with actual distance calculation
             _context.Tours.Add(tour);
             _context.SaveChanges();
             Console.WriteLine($"Tour created with ID: {tour.Id}");

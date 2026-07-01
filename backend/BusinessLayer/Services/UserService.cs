@@ -83,7 +83,7 @@ public class UserService : IUserService
             throw new UnauthorizedAccessException("Invalid username or password.");
         
         var token = _tokenService.GenerateToken(userFromDb.Id, userFromDb.Username);
-
+        // Console.WriteLine($"Business Layer ------------- Generated token for user {userFromDb.Username}: {token}"); // Debugging line to check the generated token
         return token;
 
         

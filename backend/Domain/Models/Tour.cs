@@ -6,7 +6,7 @@ public class Tour
     public required string From { get; set; }
     public required string To { get; set; }
     public required string TransportType { get; set; }
-    public required double TourDistance{ get; set; }
+    public double TourDistance{ get; set; }
     public required double EstimatedTime{ get; set; }
     //public required string routeInformation { get; set; }
 

@@ -19,7 +19,7 @@ public class UserController : ControllerBase
             return BadRequest(ModelState); 
         }
 
-        Console.WriteLine($"user: {user}");
+        // Console.WriteLine($"user: {user}");
         // returnt den Token
         var loggedInUserToken = await _service.RegisterUserAsync(user);
         User userFromDb = await _service.GetUserByUsernameAsync(user.Username);
@@ -32,8 +32,10 @@ public class UserController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] User user)
     {
-        var loggedInUserToken = await _service.LoginUserAsync(user);
-        return Ok(new { loggedInUserToken });
+        string loggedInUserToken = await _service.LoginUserAsync(user);
+        // Console.WriteLine($"user: {user}");
+        // Console.WriteLine($"Presentation Layer ------------- Generated token for user {user.Username}: {loggedInUserToken}");
+        return Ok(new { token = loggedInUserToken });
     }
 
     [HttpGet]

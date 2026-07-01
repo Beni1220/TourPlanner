@@ -43,15 +43,23 @@ public class TokenService
 
             string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
             _activeTokens.Add(tokenString);
-             return tokenString;
+            Console.WriteLine($"added token to active tokens: {tokenString}"); // Debugging line to check the added token
+            Console.WriteLine($"Current active tokens: {string.Join(", ", _activeTokens)}"); // Debugging line to check the current active tokens
+            return tokenString;
         }
 
         public ClaimsPrincipal? ValidateToken(string token)
         {
-            if (!_activeTokens.Contains(token))
-                return null;
+            // foreach (var activeToken in _activeTokens)
+            // {
+            //     Console.WriteLine($"Active token: {activeToken}"); // Debugging line to check the active tokens
+            // }
 
-            Console.WriteLine("Token gibt es");
+            if (!_activeTokens.Contains(token))
+            {
+                Console.WriteLine("Token ist nicht aktiv");
+                return null;
+            }
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var validationParams = new TokenValidationParameters
@@ -89,7 +97,8 @@ public class TokenService
             Console.WriteLine("Check 2");
 
             string token = parts[1];
-
+            Console.WriteLine($"Extracted token: {token}"); // Debugging line to check the extracted token
+            Console.WriteLine($"Current active tokens in GetUserIdFromToken: {string.Join(", ", _activeTokens)}"); // Debugging line to check the current active tokens
             var principal = ValidateToken(token);
             if (principal == null)
                 return 0;

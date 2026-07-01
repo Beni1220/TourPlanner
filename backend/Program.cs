@@ -32,7 +32,7 @@ builder.Services.AddScoped<ITourCoordinateRepository, TourCoordinateRepository>(
 builder.Services.AddScoped<ITourCoordinateService, TourCoordinateService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<TokenService>();
+builder.Services.AddSingleton<TokenService>();
 
 var app = builder.Build();
 

@@ -6,7 +6,7 @@ using System.Security.Claims;
 public class TourController : ControllerBase
 {
     private readonly ITourService _service;
-    private readonly TokenService _tokenService; // Assuming you have a TokenService to handle token validation
+    private readonly TokenService _tokenService;
 
     public TourController(ITourService service, TokenService tokenService)
     {

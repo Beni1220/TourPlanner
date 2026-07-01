@@ -71,10 +71,10 @@ public class TourService : ITourService
         if (!validTransportTypes.Contains(tour.TransportType))
             throw new ArgumentException("Invalid transport type.");
 
-        if (tour.TourDistance <= 0)
-            throw new ArgumentException("Distance must be greater than 0.");
+        // if (tour.TourDistance <= 0)
+        //     throw new ArgumentException("Distance must be greater than 0.");
 
-        if (tour.EstimatedTime <= 0)
-            throw new ArgumentException("Estimated time must be greater than 0.");
+        // if (tour.EstimatedTime <= 0)
+        //     throw new ArgumentException("Estimated time must be greater than 0.");
     }
 }
