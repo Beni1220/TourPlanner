@@ -23,8 +23,10 @@ export class TourService {
   constructor(private http: HttpClient) { }
 
   getTours(): Observable<Tour[]> {
-    return this.http.get<Tour[]>(this.apiUrl);
+    const token = localStorage.getItem('token'); // Retrieve the token from local storage
+    return this.http.get<Tour[]>('/api/users/tours', { headers: { Authorization: `Bearer ${token}` } });
   }
+ 
 
   createTour(tour: Tour): Observable<Tour> {
     const token = localStorage.getItem('token'); // Retrieve the token from local storage

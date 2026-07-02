@@ -10,4 +10,6 @@ public interface IUserRepository
 
     // löschen
     Task<User> RegisterUserAsync(User user);
+
+    Task<List<Tour>> GetToursByUserIdAsync(int userId);
 }

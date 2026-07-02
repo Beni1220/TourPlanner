@@ -30,9 +30,11 @@ export class TourForm {
   fromValid = signal<boolean | null>(null);
   toValid = signal<boolean | null>(null);
   
+  ngOnInit() {
+    this.loadTours();
+  } 
 
   constructor(private tourService: TourService, private openRouteService: OpenrouteService) {
-    this.loadTours();
   }
 
   public validatePlace(place: string, type: 'from' | 'to') {
@@ -73,12 +75,11 @@ export class TourForm {
   }
 
   loadTours(): void {
-    this.tourService.getTours().subscribe({
-      next: (tours) => this.tours.set(tours),
-      error: (err) => this.error.set(this.getErrorMessage(err))
-    });
-  }
-
+  this.tourService.getTours().subscribe({
+    next: (tours) => this.tours.set(tours),
+    error: (err) => this.error.set(this.getErrorMessage(err))
+  });
+}
 
   async addTour(): Promise<void> {
 

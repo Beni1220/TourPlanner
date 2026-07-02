@@ -5,10 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 public class UserController : ControllerBase
 {
     private readonly IUserService _service;
+    private readonly TokenService _tokenService;
+    private readonly ILogger<UserController> _logger;
 
-    public UserController(IUserService service)
+    public UserController(IUserService service, TokenService tokenService, ILogger<UserController> logger)
     {
         _service = service;
+        _tokenService = tokenService;
+        _logger = logger;
     }
 
     [HttpPost("register")]
@@ -78,5 +82,15 @@ public class UserController : ControllerBase
     {
         await _service.DeleteUserAsync(id);
         return Ok();
+    }
+
+    [HttpGet("tours")]
+    public async Task<IActionResult> GetToursByUserId([FromHeader(Name = "Authorization")] string token)
+    {
+        var userId = _tokenService.GetUserIdFromToken(token);
+        _logger.LogInformation($"Extracted token test------------------------------------: {token}"); // Debugging line to check the extracted userId
+        _logger.LogInformation($"Extracted userId from token: {userId}"); // Debugging line to check the extracted userId
+        var tours = await _service.GetToursByUserIdAsync(userId);
+        return Ok(tours);
     }
 }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -18,13 +19,14 @@ export class User {
   loginForm = { username: '', password: '' };
   registerForm = { username: '', password: '' };
 
-  constructor(private http: HttpClient, public auth: AuthService) {}
+  constructor(private http: HttpClient, public auth: AuthService, private router: Router) {}
 
   login() {
     this.http.post('/api/users/login', this.loginForm).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.token);
-        this.auth.close(); 
+        this.auth.close();
+        location.reload();
       },
       error: (err) => console.error(err)
     });
