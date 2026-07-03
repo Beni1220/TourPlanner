@@ -13,5 +13,5 @@ public interface IUserService
     Task<string> RegisterUserAsync(User user);
     Task<string> LoginUserAsync(User user);
 
-    Task<List<Tour>> GetToursByUserIdAsync(int userId);
+    
 }

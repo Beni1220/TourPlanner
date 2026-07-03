@@ -23,8 +23,18 @@ export class TourLogsService {
 
   constructor(private http: HttpClient) { }
 
+  getToursLogs(): Observable<ITourLogs[]> {
+    const token = localStorage.getItem('token'); // Retrieve the token from local storage
+    return this.http.get<ITourLogs[]>(`${this.apiUrl}/token`, { headers: { Authorization: `Bearer ${token}` } });
+  }
+  /*
   getTourLogs(): Observable<ITourLogs[]> {
     return this.http.get<ITourLogs[]>(this.apiUrl);
+  }
+  */
+
+  getTourNameByTourId(tourId: number): Observable<string> {
+    return this.http.get(`${this.apiUrl}/tourName/${tourId}`, { responseType: 'text' });
   }
 
   createTourLog(tourLog: ITourLogs): Observable<ITourLogs> {

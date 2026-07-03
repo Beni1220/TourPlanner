@@ -63,10 +63,7 @@ public class UserRepository : IUserRepository
 
 
 
-    public async Task<List<Tour>> GetToursByUserIdAsync(int userId)
-    {
-        return await _context.Tours.Where(t => t.UserId == userId).ToListAsync();
-    }
+
 
     
 

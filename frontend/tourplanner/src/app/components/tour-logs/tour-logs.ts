@@ -2,8 +2,9 @@ import { Component, effect, signal } from '@angular/core';
 import { TourLogsService, ITourLogs } from '../../services/tourlogs.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { TourService } from '../../services/tour.services';
+import {TourSelectionService} from '../../services/tour-selection-service';
 import { ErrorHandlingService } from '../../services/ErrorHandlingService';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-tour-logs',
@@ -16,6 +17,7 @@ export class TourLogs {
   error = signal<string>('');
   editingLog: ITourLogs | null = null;
   tourName = "";
+  tourNames = signal<Map<number, string>>(new Map());
 
   newTourLog: ITourLogs = {
     tourId: 0,
@@ -27,17 +29,21 @@ export class TourLogs {
     totalTime: 0,
   };
 
-  constructor(private tourLogsService: TourLogsService, private tourService: TourService, private errorHandlingService: ErrorHandlingService) {
-    this.loadTourLogs();
+  constructor(public tourLogsService: TourLogsService, private tourSelectionService: TourSelectionService, private errorHandlingService: ErrorHandlingService, public authService: AuthService) {
     effect(() => {
-      const id = this.tourService.selectedTourId();
+      const id = this.tourSelectionService.selectedTourId();
       this.newTourLog.tourId = id;
-      this.tourName = this.tourService.selectedTourName();
+      this.tourName = this.tourSelectionService.selectedTourName();
+      if(authService.isLoggedIn()) {
+        this.loadTourLogs();
+      }
     });
   }
 
 
-  
+  getTourNameByTourId(tourId: number): string {
+    return this.tourNames().get(tourId) || 'Unbekannte Tour';
+  }
 
   autoResize(event: any) {
     const el = event.target;
@@ -59,9 +65,28 @@ export class TourLogs {
   }
 
   loadTourLogs(): void {
-    this.tourLogsService.getTourLogs().subscribe({
-      next: (logs) => this.tourLogs.set(logs),
-      error: (err: any) => this.error.set(this.errorHandlingService.getErrorMessage(err))
+    this.tourLogsService.getToursLogs().subscribe({
+      next: (logs) => {
+        this.tourLogs.set(logs);
+        this.loadTourNames(logs);
+      },
+      error: (err) => this.error.set(this.errorHandlingService.getErrorMessage(err))
+    });
+  }
+
+  private loadTourNames(logs: ITourLogs[]): void {
+    const uniqueIds = [...new Set(logs.map(l => l.tourId))];
+    uniqueIds.forEach(id => {
+      if (!this.tourNames().has(id)) {
+        this.tourLogsService.getTourNameByTourId(id).subscribe({
+          next: (name) => {
+            const map = new Map(this.tourNames());
+            map.set(id, name);
+            this.tourNames.set(map);
+          },
+          error: (err) => this.error.set(this.errorHandlingService.getErrorMessage(err))
+        });
+      }
     });
   }
 
@@ -71,9 +96,9 @@ export class TourLogs {
       next: (createdLog) => { 
         console.log('check 2');
         this.tourLogs.update(logs => [...logs, createdLog]);
-        console.log(this.tourService.selectedTourId());
+        console.log(this.tourSelectionService.selectedTourId());
         this.newTourLog = {
-          tourId: this.tourService.selectedTourId(), // muss später auf die echte ID gesetzt werden
+          tourId: this.tourSelectionService.selectedTourId(), // muss später auf die echte ID gesetzt werden
           date: new Date(),
           comment: '',
           difficulty: 0, 

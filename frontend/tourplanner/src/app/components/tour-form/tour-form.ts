@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { OpenrouteService } from '../../services/openroute.service';
 import {AuthService} from "../../services/auth.service";
 import { ErrorHandlingService } from '../../services/ErrorHandlingService';
+import {TourSelectionService} from "../../services/tour-selection-service";
 
 
 @Component({
@@ -39,7 +40,7 @@ export class TourForm {
   } 
   */
 
-  constructor(private tourService: TourService, private openRouteService: OpenrouteService, public authService: AuthService, private errorHandlingService: ErrorHandlingService) {
+  constructor(private tourService: TourService, private openRouteService: OpenrouteService, public authService: AuthService, private errorHandlingService: ErrorHandlingService, private tourSelectionService: TourSelectionService) {
     effect(() => {
       console.log('AuthService isLoggedIn changed:', this.authService.isLoggedIn());
       // läuft automatisch jedes Mal, wenn sich authService.isLoggedIn() ändert
@@ -67,8 +68,8 @@ export class TourForm {
 
   async selectTour(tour: Tour) {
     this.selectedTourId = tour.id!;
-    this.tourService.selectedTourId.set(tour.id!); // Set the selected tour ID in the service
-    this.tourService.selectedTourName.set(tour.name); // Set the selected tour name in the service
+    this.tourSelectionService.selectedTourId.set(tour.id!); // Set the selected tour ID in the service
+    this.tourSelectionService.selectedTourName.set(tour.name); // Set the selected tour name in the service
     try {
 
       const route = await this.openRouteService.getRoute(

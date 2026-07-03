@@ -28,12 +28,26 @@ public class TourLogsService : ITourLogsService
         _repository.DeleteTourLog(id);
     }
 
+    public async Task<List<TourLogs>> GetTourLogsByUserIdAsync(int userId)
+    {
+        if (userId <= 0)
+            throw new ArgumentException("Invalid user ID.");
+        return await _repository.GetTourLogsByUserIdAsync(userId);
+    }
+
+    public string GetTourNameByTourId(int tourId)
+    {
+        if (tourId <= 0)
+            throw new ArgumentException("Invalid tour ID.");
+        return _repository.GetTourNameByTourId(tourId);
+    }
+
     private void ValidateTourLog(TourLogs tourLog)
     {
         if (tourLog == null)
             throw new ArgumentNullException(nameof(tourLog));
         if (tourLog.TourId <= 0)
-            throw new ArgumentException("TourId must be greater than 0.");
+            throw new ArgumentException("Choose a tour");
         if (string.IsNullOrWhiteSpace(tourLog.Comment))
             throw new ArgumentException("Comment cannot be empty.");
         // if (tourLog.Difficulty < 1 || tourLog.Difficulty > 5)

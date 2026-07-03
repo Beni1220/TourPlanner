@@ -5,5 +5,7 @@
     TourLogs CreateTourLog(TourLogs tourLogs);
     void UpdateTourLog(TourLogs tourLogs);
     void DeleteTourLog(int id);
+    Task<List<TourLogs>> GetTourLogsByUserIdAsync(int userId);
+    string GetTourNameByTourId(int tourId);
 }
     

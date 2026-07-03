@@ -8,4 +8,6 @@ public interface ITourService
     void DeleteTour(int id);
 
     List<Tour> SearchTour(string searchTerm);
+
+    Task<List<Tour>> GetToursByUserIdAsync(int userId);
 }

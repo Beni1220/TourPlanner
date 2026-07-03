@@ -68,10 +68,15 @@
   <div class="section-header">
     <div>
       <h2 class="tour-title">Tour-Logs</h2>
-      <p class="section-hint">Bearbeite Einträge direkt oder lösche veraltete Logs.</p>
+      @if (authService.isLoggedIn()) {
+        <p class="section-hint">Bearbeite Einträge direkt oder lösche veraltete Logs.</p>
+      } @else {
+        <p class="section-hint">Melde dich an, um Tour-Logs zu bearbeiten oder zu löschen.</p>
+      }
     </div>
   </div>
 
+  
   <div class="tour-grid">
     @for (log of tourLogs(); track log.id) {
       <article class="tour-card">
@@ -114,6 +119,7 @@
         } @else {
           <div class="tour-title">{{ log.date | date: 'dd.MM.yyyy' }}</div>
           <div class="tour-info">
+            <p><strong>Tour:</strong> {{ getTourNameByTourId(log.tourId) }}</p>
             <p><strong>Kommentar:</strong> {{ log.comment }}</p>
             <p><strong>Schwierigkeit:</strong> {{ getDifficultyLabel(log.difficulty) }}</p>
             <p><strong>Bewertung:</strong> {{ log.rating }}/5</p>

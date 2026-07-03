@@ -20,14 +20,12 @@ export interface Tour {
 })
 export class TourService {
   private apiUrl = '/api/tours'
-  selectedTourId = signal<number>(0); // Signal to hold the selected tour ID
-  selectedTourName = signal<string>(''); // Signal to hold the selected tour name
 
   constructor(private http: HttpClient) { }
 
   getTours(): Observable<Tour[]> {
     const token = localStorage.getItem('token'); // Retrieve the token from local storage
-    return this.http.get<Tour[]>('/api/users/tours', { headers: { Authorization: `Bearer ${token}` } });
+    return this.http.get<Tour[]>(`${this.apiUrl}/token`, { headers: { Authorization: `Bearer ${token}` } });
   }
  
 

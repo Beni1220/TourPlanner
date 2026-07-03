@@ -1,3 +1,5 @@
+    using Microsoft.EntityFrameworkCore;
+    
     public class TourRepository : ITourRepository
     {
         private readonly TourPlannerContext _context;
@@ -55,6 +57,11 @@
             return _context.Tours
                 .Where(t => t.Name.Contains(searchTerm) || t.Description.Contains(searchTerm))
                 .ToList();
+        }
+
+        public async Task<List<Tour>> GetToursByUserIdAsync(int userId)
+        {
+            return await _context.Tours.Where(t => t.UserId == userId).ToListAsync();
         }
 
     }

@@ -84,13 +84,5 @@ public class UserController : ControllerBase
         return Ok();
     }
 
-    [HttpGet("tours")]
-    public async Task<IActionResult> GetToursByUserId([FromHeader(Name = "Authorization")] string token)
-    {
-        var userId = _tokenService.GetUserIdFromToken(token);
-        _logger.LogInformation($"Extracted token test------------------------------------: {token}"); // Debugging line to check the extracted userId
-        _logger.LogInformation($"Extracted userId from token: {userId}"); // Debugging line to check the extracted userId
-        var tours = await _service.GetToursByUserIdAsync(userId);
-        return Ok(tours);
-    }
+
 }

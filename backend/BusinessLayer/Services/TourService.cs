@@ -46,6 +46,13 @@ public class TourService : ITourService
         _repository.Delete(id);
     }
 
+    public async Task<List<Tour>> GetToursByUserIdAsync(int userId)
+    {
+        if (userId <= 0)
+            throw new ArgumentException("Invalid user ID.");
+        return await _repository.GetToursByUserIdAsync(userId);
+    }
+
 
     private void ValidateTour(Tour tour)
     {

@@ -11,5 +11,5 @@ public interface ITourRepository
 
     List<Tour> SearchTour(string searchTerm);
 
-
+    Task<List<Tour>> GetToursByUserIdAsync(int userId);
 }

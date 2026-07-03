@@ -109,14 +109,6 @@ public class UserService : IUserService
 
     
 
-    public async Task<List<Tour>> GetToursByUserIdAsync(int userId)
-    {
-        if (userId <= 0)
-            throw new ArgumentException("Invalid user ID.");
-        return await _userRepository.GetToursByUserIdAsync(userId);
-    }
-
-
     private void ValidateUser(User user)
     {
         if (user == null)

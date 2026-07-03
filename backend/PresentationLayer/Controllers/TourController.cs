@@ -7,11 +7,13 @@ public class TourController : ControllerBase
 {
     private readonly ITourService _service;
     private readonly TokenService _tokenService;
+    private readonly ILogger<TourController> _logger;
 
-    public TourController(ITourService service, TokenService tokenService)
+    public TourController(ITourService service, TokenService tokenService, ILogger<TourController> logger)
     {
         _service = service;
-        _tokenService = tokenService;   
+        _tokenService = tokenService;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -79,5 +81,13 @@ public class TourController : ControllerBase
         return Ok(tours);
     }
 
-
+    [HttpGet("token")]
+    public async Task<IActionResult> GetToursByUserId([FromHeader(Name = "Authorization")] string token)
+    {
+        var userId = _tokenService.GetUserIdFromToken(token);
+        _logger.LogInformation($"Extracted token test------------------------------------: {token}"); // Debugging line to check the extracted userId
+        _logger.LogInformation($"Extracted userId from token: {userId}"); // Debugging line to check the extracted userId
+        var tours = await _service.GetToursByUserIdAsync(userId);
+        return Ok(tours);
+    }
 }
