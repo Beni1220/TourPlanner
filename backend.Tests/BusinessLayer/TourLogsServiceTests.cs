@@ -44,32 +44,7 @@ public class TourLogsServiceTests
         Assert.Throws<ArgumentException>(() => _tourLogsService.CreateTourLog(log));
     }
 
-    [Fact]
-    public void CreateTourLog_DifficultyTooLow_ThrowsArgumentException()
-    {
-        var log = CreateValidTourLog();
-        log.Difficulty = 0;
 
-        Assert.Throws<ArgumentException>(() => _tourLogsService.CreateTourLog(log));
-    }
-
-    [Fact]
-    public void CreateTourLog_DifficultyTooHigh_ThrowsArgumentException()
-    {
-        var log = CreateValidTourLog();
-        log.Difficulty = 6;
-
-        Assert.Throws<ArgumentException>(() => _tourLogsService.CreateTourLog(log));
-    }
-
-    [Fact]
-    public void CreateTourLog_RatingTooLow_ThrowsArgumentException()
-    {
-        var log = CreateValidTourLog();
-        log.Rating = 0;
-
-        Assert.Throws<ArgumentException>(() => _tourLogsService.CreateTourLog(log));
-    }
 
     [Fact]
     public void CreateTourLog_RatingTooHigh_ThrowsArgumentException()

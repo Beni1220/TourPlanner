@@ -1,20 +1,24 @@
 using Moq;
-
+using Microsoft.Extensions.Logging;
 public class UserServiceTests
 {
     private readonly Mock<IUserRepository> _repositoryMock;
+    private readonly Mock<TokenService> _tokenServiceMock;
+    private readonly Mock<ILogger<UserService>> _loggerMock;
     private readonly UserService _userService;
 
     public UserServiceTests()
     {
         _repositoryMock = new Mock<IUserRepository>();
-        _userService = new UserService(_repositoryMock.Object);
+        _tokenServiceMock = new Mock<TokenService>();
+        _loggerMock = new Mock<ILogger<UserService>>();
+        _userService = new UserService(_repositoryMock.Object, _tokenServiceMock.Object, _loggerMock.Object);
     }
 
     private User CreateValidUser() => new User
     {
         Id = 1,
-        UserName = "johndoe",
+        Username = "johndoe",
         Password = "secret123",
         CreatedAt = DateTime.UtcNow,
         LastLoginAt = DateTime.UtcNow
@@ -34,7 +38,7 @@ public class UserServiceTests
     public async Task AddUser_EmptyName_ThrowsArgumentException()
     {
         var user = CreateValidUser();
-        user.UserName = "";
+        user.Username = "";
         await Assert.ThrowsAsync<ArgumentException>(() => _userService.AddUserAsync(user));
     }
 
@@ -42,7 +46,7 @@ public class UserServiceTests
     public async Task AddUser_NameTooLong_ThrowsArgumentException()
     {
         var user = CreateValidUser();
-        user.UserName = new string('a', 51);
+        user.Username = new string('a', 51);
         await Assert.ThrowsAsync<ArgumentException>(() => _userService.AddUserAsync(user));
     }
 
@@ -85,7 +89,6 @@ public class UserServiceTests
         await Assert.ThrowsAsync<ArgumentException>(() => _userService.GetUserByIdAsync(0));
     }
 
-
     [Fact]
     public async Task UpdateUser_ValidUser_CallsRepository()
     {
@@ -118,7 +121,7 @@ public class UserServiceTests
     [Fact]
     public async Task UsernameExists_ValidUsername_ReturnsTrue()
     {
-        _repositoryMock.Setup(r => r.UsernameExists("John Doe")).ReturnsAsync(true);
+        _repositoryMock.Setup(r => r.UsernameExistsAsync("John Doe")).ReturnsAsync(true);
         var result = await _userService.UsernameExists("John Doe");
         Assert.True(result);
     }

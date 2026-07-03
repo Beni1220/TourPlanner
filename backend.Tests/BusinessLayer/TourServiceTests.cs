@@ -1,14 +1,18 @@
 using Moq;
+using Microsoft.Extensions.Logging;
 
 public class TourServiceTests
 {
     private readonly Mock<ITourRepository> _repositoryMock;
+    private readonly Mock<ILogger<TourService>> _loggerMock;
     private readonly TourService _tourService;
+    private const int TestUserId = 1;
 
     public TourServiceTests()
     {
         _repositoryMock = new Mock<ITourRepository>();
-        _tourService = new TourService(_repositoryMock.Object);
+        _loggerMock = new Mock<ILogger<TourService>>();
+        _tourService = new TourService(_repositoryMock.Object, _loggerMock.Object);
     }
 
     private Tour CreateValidTour()
@@ -29,19 +33,15 @@ public class TourServiceTests
     [Fact]
     public void CreateTour_ValidTour_ReturnsCreatedTour()
     {
-        // Arrange
         var tour = CreateValidTour();
-
         _repositoryMock
-            .Setup(r => r.Create(tour))
+            .Setup(r => r.Create(tour, TestUserId))
             .Returns(tour);
 
-        // Act
-        var result = _tourService.CreateTour(tour);
+        var result = _tourService.CreateTour(tour, TestUserId);
 
-        // Assert
         Assert.Equal(tour, result);
-        _repositoryMock.Verify(r => r.Create(tour), Times.Once);
+        _repositoryMock.Verify(r => r.Create(tour, TestUserId), Times.Once);
     }
 
     [Fact]
@@ -49,9 +49,8 @@ public class TourServiceTests
     {
         var tour = CreateValidTour();
         tour.Name = "";
-
         Assert.Throws<ArgumentException>(() =>
-            _tourService.CreateTour(tour));
+            _tourService.CreateTour(tour, TestUserId));
     }
 
     [Fact]
@@ -59,9 +58,8 @@ public class TourServiceTests
     {
         var tour = CreateValidTour();
         tour.From = "";
-
         Assert.Throws<ArgumentException>(() =>
-            _tourService.CreateTour(tour));
+            _tourService.CreateTour(tour, TestUserId));
     }
 
     [Fact]
@@ -69,9 +67,8 @@ public class TourServiceTests
     {
         var tour = CreateValidTour();
         tour.To = "";
-
         Assert.Throws<ArgumentException>(() =>
-            _tourService.CreateTour(tour));
+            _tourService.CreateTour(tour, TestUserId));
     }
 
     [Fact]
@@ -79,9 +76,8 @@ public class TourServiceTests
     {
         var tour = CreateValidTour();
         tour.To = "Vienna";
-
         Assert.Throws<ArgumentException>(() =>
-            _tourService.CreateTour(tour));
+            _tourService.CreateTour(tour, TestUserId));
     }
 
     [Fact]
@@ -89,9 +85,8 @@ public class TourServiceTests
     {
         var tour = CreateValidTour();
         tour.TransportType = "Plane";
-
         Assert.Throws<ArgumentException>(() =>
-            _tourService.CreateTour(tour));
+            _tourService.CreateTour(tour, TestUserId));
     }
 
     [Fact]
@@ -99,9 +94,8 @@ public class TourServiceTests
     {
         var tour = CreateValidTour();
         tour.TourDistance = 0;
-
         Assert.Throws<ArgumentException>(() =>
-            _tourService.CreateTour(tour));
+            _tourService.CreateTour(tour, TestUserId));
     }
 
     [Fact]
@@ -109,16 +103,14 @@ public class TourServiceTests
     {
         var tour = CreateValidTour();
         tour.EstimatedTime = 0;
-
         Assert.Throws<ArgumentException>(() =>
-            _tourService.CreateTour(tour));
+            _tourService.CreateTour(tour, TestUserId));
     }
 
     [Fact]
     public void DeleteTour_ValidId_CallsRepository()
     {
         _tourService.DeleteTour(1);
-
         _repositoryMock.Verify(r => r.Delete(1), Times.Once);
     }
 
@@ -132,11 +124,7 @@ public class TourServiceTests
     [Fact]
     public void GetAllTours_ReturnsList()
     {
-        var tours = new List<Tour>
-        {
-            CreateValidTour()
-        };
-
+        var tours = new List<Tour> { CreateValidTour() };
         _repositoryMock
             .Setup(r => r.GetAll())
             .Returns(tours);
