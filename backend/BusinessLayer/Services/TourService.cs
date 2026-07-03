@@ -104,4 +104,15 @@ public class TourService : ITourService
         return _repository.SearchTour(searchTerm);
     }
 
+    public object ExportTourAndLogsJson()
+    {
+        _logger.LogInformation("Exporting tours and logs to JSON");
+        return _repository.ExportTourAndLogsJson();
+    }
+
+    public object ImportTourAndLogsJson(List<Tour> tours, int userId)
+    {
+        _logger.LogInformation("Importing tours and logs from JSON");
+        return _repository.ImportTourAndLogsJson(tours, userId);
+    }
 }

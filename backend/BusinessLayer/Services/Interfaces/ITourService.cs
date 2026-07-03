@@ -9,5 +9,11 @@ public interface ITourService
 
     List<Tour> SearchTour(string searchTerm);
 
+<<<<<<< Updated upstream
     Task<List<Tour>> GetToursByUserIdAsync(int userId);
+=======
+    object ExportTourAndLogsJson();
+
+    object ImportTourAndLogsJson(List<Tour> tours, int userId);
+>>>>>>> Stashed changes
 }

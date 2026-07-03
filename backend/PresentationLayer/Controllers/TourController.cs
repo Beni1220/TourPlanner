@@ -81,6 +81,7 @@ public class TourController : ControllerBase
         return Ok(tours);
     }
 
+<<<<<<< Updated upstream
     [HttpGet("token")]
     public async Task<IActionResult> GetToursByUserId([FromHeader(Name = "Authorization")] string token)
     {
@@ -90,4 +91,24 @@ public class TourController : ControllerBase
         var tours = await _service.GetToursByUserIdAsync(userId);
         return Ok(tours);
     }
+=======
+    [HttpGet("export")]
+    public IActionResult ExportTourAndLogsJson()
+    {
+        var exportData = _service.ExportTourAndLogsJson();
+        return Ok(exportData);
+    }
+
+    [HttpPost("import")]
+    public IActionResult ImportTourAndLogsJson([FromBody] List<Tour> tours, [FromHeader(Name = "Authorization")] string token)
+    {
+        int userId = _tokenService.GetUserIdFromToken(token);
+        Console.WriteLine($"Received token: {token}"); // Debugging line to check the token value
+        Console.WriteLine($"Extracted user ID from token: {userId} -------------------------------------------------------------------------------- import"); // Debugging line to check the extracted user ID
+        var importResult = _service.ImportTourAndLogsJson(tours, userId);
+        return Ok(importResult);
+    }
+
+
+>>>>>>> Stashed changes
 }
