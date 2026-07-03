@@ -80,41 +80,48 @@
           </div>
         </div>
 
-        <div class="tour-grid">
-          @for (tour of tours(); track tour.id) {
-            <article class="tour-card" (click)="selectTour(tour)">
-              @if (editingTour?.id === tour.id) {
-                @if (editingTour; as currentEdit) {
-                  <div class="card-row">
-                    <input type="text" [(ngModel)]="currentEdit.name" />
-                    <input type="text" [(ngModel)]="currentEdit.description" />
-                    <select [(ngModel)]="currentEdit.transportType">
-                      <option>Bike</option>
-                      <option>Hike</option>
-                      <option>Running</option>
-                      <option>Vacation</option>
-                    </select>
-                    <input type="text" [(ngModel)]="currentEdit.from" />
-                    <input type="text" [(ngModel)]="currentEdit.to" />
-                  </div>
-                  <div class="card-row">
-                    <input type="number" min="0" [(ngModel)]="currentEdit.estimatedTime" />
-                  </div>
-                  <div class="card-actions">
-                    <button class="secondary-button" (click)="saveEdit()">Speichern</button>
-                    <button class="danger-button" (click)="cancelEdit()">Abbrechen</button>
+        @if (authService.isLoggedIn()) {
+          <div class="tour-grid">
+            @for (tour of tours(); track tour.id) {
+              <article class="tour-card" (click)="selectTour(tour)">
+                @if (editingTour?.id === tour.id) {
+                  @if (editingTour; as currentEdit) {
+                    <div class="card-row">
+                      <input type="text" [(ngModel)]="currentEdit.name" />
+                      <input type="text" [(ngModel)]="currentEdit.description" />
+                      <select [(ngModel)]="currentEdit.transportType">
+                        <option>Bike</option>
+                        <option>Hike</option>
+                        <option>Running</option>
+                        <option>Vacation</option>
+                      </select>
+                      <input type="text" [(ngModel)]="currentEdit.from" />
+                      <input type="text" [(ngModel)]="currentEdit.to" />
+                    </div>
+                    <div class="card-row">
+                      <input type="number" min="0" [(ngModel)]="currentEdit.estimatedTime" />
+                    </div>
+                    <div class="card-actions">
+                      <button class="secondary-button" (click)="saveEdit()">Speichern</button>
+                      <button class="danger-button" (click)="cancelEdit()">Abbrechen</button>
+                    </div>
+                  }
+                } @else {
+                  <div class="tour-title">{{ tour.name }}</div>
+                  <div class="tour-meta">{{ tour.transportType }} · {{ tour.from }} from · {{ tour.to }} to</div>
+                  <div class="card-actions"> 
+                    
+                      <button class="secondary-button" (click)="startEdit(tour)">Bearbeiten</button>
+                      <button class="danger-button" (click)="deleteTour(tour.id!)">Löschen</button>
                   </div>
                 }
-              } @else {
-                <div class="tour-title">{{ tour.name }}</div>
-                <div class="tour-meta">{{ tour.transportType }} · {{ tour.from }} from · {{ tour.to }} to</div>
-                <div class="card-actions">
-                  <button class="secondary-button" (click)="startEdit(tour)">Bearbeiten</button>
-                  <button class="danger-button" (click)="deleteTour(tour.id!)">Löschen</button>
-                </div>
-              }
-            </article>
-          }
-        </div>
+              </article>
+            }
+          </div>
+        } @else {
+          <p class="section-hint">Bitte melde dich an, um deine Touren zu verwalten.</p>
+        }
+
+        
       </section>
 </body>

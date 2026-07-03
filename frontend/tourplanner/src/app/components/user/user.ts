@@ -25,8 +25,9 @@ export class User {
     this.http.post('/api/users/login', this.loginForm).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.token);
+        this.auth.userLoggedIn();
         this.auth.close();
-        location.reload();
+        //location.reload(); 
       },
       error: (err) => console.error(err)
     });
@@ -36,6 +37,7 @@ export class User {
     this.http.post('/api/users/register', this.registerForm).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.token);
+        this.auth.userLoggedIn();
         this.auth.close();
       },
       error: (err) => console.error(err)

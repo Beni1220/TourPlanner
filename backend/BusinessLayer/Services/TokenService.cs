@@ -88,28 +88,21 @@ public class TokenService
             if (string.IsNullOrWhiteSpace(authHeader))
                 return 0;
 
-            Console.WriteLine("Check 1");
-
             var parts = authHeader.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length != 2 || !parts[0].Equals("Bearer", StringComparison.OrdinalIgnoreCase))
                 return 0;
 
-            Console.WriteLine("Check 2");
-
             string token = parts[1];
-            Console.WriteLine($"Extracted token: {token}"); // Debugging line to check the extracted token
-            Console.WriteLine($"Current active tokens in GetUserIdFromToken: {string.Join(", ", _activeTokens)}"); // Debugging line to check the current active tokens
+            //Console.WriteLine($"Extracted token: {token}"); // Debugging line to check the extracted token
+            //Console.WriteLine($"Current active tokens in GetUserIdFromToken: {string.Join(", ", _activeTokens)}"); // Debugging line to check the current active tokens
             var principal = ValidateToken(token);
             if (principal == null)
                 return 0;
 
-            Console.WriteLine("Check 3");
             // Find claim "userId"
             var userIdClaim = principal.Claims.FirstOrDefault(c => c.Type == "userId");
             if (userIdClaim == null)
                 return 0;
-
-            Console.WriteLine("Check 4");
 
             if (int.TryParse(userIdClaim.Value, out int userId))
                 return userId;

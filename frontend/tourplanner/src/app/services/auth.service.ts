@@ -6,4 +6,10 @@ export class AuthService {
 
   open()  { this.showLogin.set(true);  }
   close() { this.showLogin.set(false); }
+
+  isLoggedIn = signal(false);
+
+  userLoggedIn() {
+    this.isLoggedIn.set(true);
+  }
 }

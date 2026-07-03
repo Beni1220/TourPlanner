@@ -35,9 +35,9 @@ public class TourController : ControllerBase
 
             //var id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             int id = _tokenService.GetUserIdFromToken(token); // Validate the token and get the user ID
-            Console.WriteLine($"Extracted user ID from token: {id}"); // Debugging line to check the extracted user ID
+            //Console.WriteLine($"Extracted user ID from token: {id}"); // Debugging line to check the extracted user ID
             if (id == 0 || string.IsNullOrEmpty(token))
-            return Unauthorized(new { message = "Ungültiger oder fehlender Token. Bitte einloggen."});
+            return Unauthorized(new { message = "Bitte einloggen Sie sich ein."});
             var createdTour = _service.CreateTour(tour, id);
             return Created($"api/tours/{createdTour.Id}", createdTour);
         }

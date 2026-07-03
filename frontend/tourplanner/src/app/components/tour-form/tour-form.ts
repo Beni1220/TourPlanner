@@ -1,8 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { TourService, Tour } from '../../services/tour.services';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { OpenrouteService } from '../../services/openroute.service';
+import {AuthService} from "../../services/auth.service";
 
 
 @Component({
@@ -30,11 +31,20 @@ export class TourForm {
   fromValid = signal<boolean | null>(null);
   toValid = signal<boolean | null>(null);
   
+  /*
   ngOnInit() {
     this.loadTours();
   } 
+  */
 
-  constructor(private tourService: TourService, private openRouteService: OpenrouteService) {
+  constructor(private tourService: TourService, private openRouteService: OpenrouteService, public authService: AuthService  ) {
+    effect(() => {
+      console.log('AuthService isLoggedIn changed:', this.authService.isLoggedIn());
+      // läuft automatisch jedes Mal, wenn sich authService.isLoggedIn() ändert
+      if (this.authService.isLoggedIn()) {
+        this.loadTours();
+      }
+    });
   }
 
   public validatePlace(place: string, type: 'from' | 'to') {
