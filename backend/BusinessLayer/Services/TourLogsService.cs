@@ -36,8 +36,8 @@ public class TourLogsService : ITourLogsService
             throw new ArgumentException("TourId must be greater than 0.");
         if (string.IsNullOrWhiteSpace(tourLog.Comment))
             throw new ArgumentException("Comment cannot be empty.");
-        if (tourLog.Difficulty < 1 || tourLog.Difficulty > 5)
-            throw new ArgumentException("Difficulty must be between 1 and 5.");
+        // if (tourLog.Difficulty < 1 || tourLog.Difficulty > 5)
+        //     throw new ArgumentException("Difficulty must be between 1 and 5.");
         if (tourLog.Rating < 1 || tourLog.Rating > 5)
             throw new ArgumentException("Rating must be between 1 and 5.");
         if (tourLog.TotalDistance <= 0)

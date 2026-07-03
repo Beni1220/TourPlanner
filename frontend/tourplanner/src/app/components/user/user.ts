@@ -27,7 +27,7 @@ export class User {
         localStorage.setItem('token', res.token);
         this.auth.userLoggedIn();
         this.auth.close();
-        //location.reload(); 
+        location.reload(); 
       },
       error: (err) => console.error(err)
     });

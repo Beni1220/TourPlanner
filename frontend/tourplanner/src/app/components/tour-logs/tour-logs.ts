@@ -15,7 +15,7 @@ export class TourLogs {
   editingLog: ITourLogs | null = null;
 
   newTourLog: ITourLogs = {
-    tourId: 1, // muss später auf die echte ID gesetzt werden
+    tourId: 5, // muss später auf die echte ID gesetzt werden
     date: new Date(),
     comment: '',
     difficulty: 0,
