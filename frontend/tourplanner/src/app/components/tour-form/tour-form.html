@@ -79,8 +79,26 @@
             <p class="section-hint">Bearbeite Einträge direkt oder lösche veraltete Touren.</p>
           </div>
         </div>
+        <div class="import-export-bar">
+          <button class="secondary-button" (click)="exportTours()">
+            ⬇ Exportieren
+          </button>
 
+          <input type="file" accept=".json" (change)="onFileSelected($event)" hidden #fileInput />
+          <button class="secondary-button" (click)="fileInput.click()">
+            ⬆ Importieren
+          </button>
+        </div>
         @if (authService.isLoggedIn()) {
+          <div class="form-row" style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
+          <input
+            type="text"
+            placeholder="Tour suchen..."
+            [(ngModel)]="searchTerm"
+            (keyup.enter)="searchTours()"
+            />
+            <button class="secondary-button" (click)="searchTours()">Suchen</button>
+            </div>
           <div class="tour-grid">
             @for (tour of tours(); track tour.id) {
               <article class="tour-card" [class.tour-cardSelected]="tour.id === selectedTourId" (click)="selectTour(tour)">

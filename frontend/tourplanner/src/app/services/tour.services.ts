@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { signal } from '@angular/core';
 
@@ -46,6 +46,29 @@ export class TourService {
     const token = localStorage.getItem('token');
     return this.http.get<Tour>(`${this.apiUrl}/editableTours`, {headers: { Authorization: `Bearer ${token}`}});
   }
+
+  exportTours(): Observable<any> {
+    const token = localStorage.getItem('token');
+    return this.http.get(`${this.apiUrl}/export`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
+  importTours(tours: any[]): Observable<any> {
+    const token = localStorage.getItem('token');
+    return this.http.post(`${this.apiUrl}/import`, tours, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
+  searchTour(searchTerm: string): Observable<Tour[]> {
+  const token = localStorage.getItem('token');
+  const params = new HttpParams().set('searchTerm', searchTerm);
+  return this.http.get<Tour[]>(`${this.apiUrl}/search`, {
+    headers: { Authorization: `Bearer ${token}` },
+    params
+  });
+}
 
   tourRouteAdded = new Subject<[number, number][]>();
 

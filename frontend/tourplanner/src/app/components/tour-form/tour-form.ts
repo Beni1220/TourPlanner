@@ -19,6 +19,7 @@ export class TourForm {
   error = signal<string>('');
   editingTour: Tour | null = null;
   selectedTourId: number | null = null;
+  searchTerm = signal<string>('');
 
   newTour: Tour = {
     id: undefined,
@@ -134,7 +135,47 @@ export class TourForm {
       this.error.set('Route konnte nicht berechnet werden');
     }
 
-}
+  }
+
+  exportTours(): void {
+    this.tourService.exportTours().subscribe({
+      next: (data) => {
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `tours-export-${new Date().toISOString().slice(0,10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      },
+      error: (err) => this.error.set(this.errorHandlingService.getErrorMessage(err))
+    });
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const tours = JSON.parse(reader.result as string);
+        this.tourService.importTours(tours).subscribe({
+          next: () => {
+            this.loadTours();
+            this.error.set('');
+          },
+          error: (err) => this.error.set(this.errorHandlingService.getErrorMessage(err))
+        });
+      } catch {
+        this.error.set('Ungültige JSON-Datei.');
+      }
+    };
+    reader.readAsText(file);
+
+    input.value = ''; // damit dieselbe Datei erneut ausgewählt werden kann
+  }
 
   startEdit(tour: Tour): void {
     this.editingTour = { ...tour };
@@ -193,5 +234,17 @@ export class TourForm {
       tourDistance: 0,
     };
   }
+
+  searchTours(): void {
+  const term = this.searchTerm().trim();
+  if (!term) {
+    this.loadTours();
+    return;
+  }
+  this.tourService.searchTour(term).subscribe({
+    next: (tours) => this.tours.set(tours),
+    error: (err) => this.error.set(this.errorHandlingService.getErrorMessage(err))
+  });
+}
 
 }
