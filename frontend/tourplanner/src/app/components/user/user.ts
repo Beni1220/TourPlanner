@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { ErrorHandlingService } from '../../services/ErrorHandlingService';
 
 @Component({
   selector: 'app-user',
@@ -19,7 +20,7 @@ export class User {
   loginForm = { username: '', password: '' };
   registerForm = { username: '', password: '' };
 
-  constructor(private http: HttpClient, public auth: AuthService, private router: Router) {}
+  constructor(private http: HttpClient, public auth: AuthService, private router: Router, private errorHandlingService: ErrorHandlingService) {}
 
   login() {
     this.http.post('/api/users/login', this.loginForm).subscribe({
@@ -30,7 +31,7 @@ export class User {
         localStorage.setItem('username', this.loginForm.username);
         location.reload(); 
       },
-      error: (err) => console.error(err)
+      error: (err) => this.errorHandlingService.getErrorMessage(err)
     });
   }
 
@@ -42,7 +43,7 @@ export class User {
         localStorage.setItem('username', this.registerForm.username);
         this.auth.close();
       },
-      error: (err) => console.error(err)
+      error: (err) => this.errorHandlingService.getErrorMessage(err)
     });
   }
 

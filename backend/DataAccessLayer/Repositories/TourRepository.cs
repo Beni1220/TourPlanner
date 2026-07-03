@@ -49,4 +49,12 @@
             }
         }
 
+        public List<Tour> SearchTour(string searchTerm)
+        {
+            Console.WriteLine($"Searching for tours with term: {searchTerm}");
+            return _context.Tours
+                .Where(t => t.Name.Contains(searchTerm) || t.Description.Contains(searchTerm))
+                .ToList();
+        }
+
     }

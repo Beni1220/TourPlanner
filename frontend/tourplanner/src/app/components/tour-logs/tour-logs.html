@@ -8,7 +8,11 @@
   <div class="card-header">
     <div>
       <p class="small-label">Neuer Eintrag</p>
-      <h2>Tour-Log hinzufügen</h2>
+      @if (newTourLog.tourId !== 0) {
+        <h2 class="tour-title">{{ tourName }}</h2>
+      } @else {
+        <h2 class="tour-title">Tour-Log hinzufügen</h2>
+      }
     </div>
   </div>
 
@@ -63,7 +67,7 @@
 <section class="list-section">
   <div class="section-header">
     <div>
-      <h2>Tour-Logs</h2>
+      <h2 class="tour-title">Tour-Logs</h2>
       <p class="section-hint">Bearbeite Einträge direkt oder lösche veraltete Logs.</p>
     </div>
   </div>

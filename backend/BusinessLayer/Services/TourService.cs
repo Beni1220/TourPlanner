@@ -87,4 +87,14 @@ public class TourService : ITourService
          if (tour.EstimatedTime <= 0)
              throw new ArgumentException("Estimated time must be greater than 0.");
     }
+
+    public List<Tour> SearchTour(string searchTerm)
+    {
+        Console.WriteLine($"--------------Tourservice -------------- Searching for tours with term: {searchTerm}");
+        if (string.IsNullOrWhiteSpace(searchTerm))
+            return GetAllTours();
+
+        return _repository.SearchTour(searchTerm);
+    }
+
 }

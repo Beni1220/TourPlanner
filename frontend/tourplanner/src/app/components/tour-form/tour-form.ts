@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { OpenrouteService } from '../../services/openroute.service';
 import {AuthService} from "../../services/auth.service";
+import { ErrorHandlingService } from '../../services/ErrorHandlingService';
 
 
 @Component({
@@ -16,6 +17,7 @@ export class TourForm {
   tours = signal<Tour[]>([]);
   error = signal<string>('');
   editingTour: Tour | null = null;
+  selectedTourId: number | null = null;
 
   newTour: Tour = {
     id: undefined,
@@ -37,7 +39,7 @@ export class TourForm {
   } 
   */
 
-  constructor(private tourService: TourService, private openRouteService: OpenrouteService, public authService: AuthService  ) {
+  constructor(private tourService: TourService, private openRouteService: OpenrouteService, public authService: AuthService, private errorHandlingService: ErrorHandlingService) {
     effect(() => {
       console.log('AuthService isLoggedIn changed:', this.authService.isLoggedIn());
       // läuft automatisch jedes Mal, wenn sich authService.isLoggedIn() ändert
@@ -64,7 +66,9 @@ export class TourForm {
   
 
   async selectTour(tour: Tour) {
-
+    this.selectedTourId = tour.id!;
+    this.tourService.selectedTourId.set(tour.id!); // Set the selected tour ID in the service
+    this.tourService.selectedTourName.set(tour.name); // Set the selected tour name in the service
     try {
 
       const route = await this.openRouteService.getRoute(
@@ -72,9 +76,9 @@ export class TourForm {
         tour.to,
         tour.id!
       );
-
+      
       this.tourService.tourRouteAdded.next(route);
-
+      
     } catch (err) {
 
       console.error(err);
@@ -87,7 +91,7 @@ export class TourForm {
   loadTours(): void {
   this.tourService.getTours().subscribe({
     next: (tours) => this.tours.set(tours),
-    error: (err) => this.error.set(this.getErrorMessage(err))
+    error: (err) => this.error.set(this.errorHandlingService.getErrorMessage(err))
   });
 }
 
@@ -122,7 +126,7 @@ export class TourForm {
           }
         },
         error: err =>
-          this.error.set(this.getErrorMessage(err))
+          this.error.set(this.errorHandlingService.getErrorMessage(err))
       });
     } catch (err) {
       console.error(err);
@@ -156,7 +160,7 @@ export class TourForm {
         this.editingTour = null;
         this.error.set('');
       },
-      error: (err) => this.error.set(this.getErrorMessage(err))
+      error: (err) => this.error.set(this.errorHandlingService.getErrorMessage(err))
     });
   }
 
@@ -169,8 +173,12 @@ export class TourForm {
         }
         this.error.set('');
       },
-      error: (err) => this.error.set(this.getErrorMessage(err))
+      error: (err) => this.error.set(this.errorHandlingService.getErrorMessage(err))
     });
+  }
+
+  roundKm(meters: number): number {
+    return Math.round(meters / 100) / 10;  // Rundet auf eine Nachkommastelle
   }
 
   private resetNewTour(): void {
@@ -185,12 +193,4 @@ export class TourForm {
     };
   }
 
-  private getErrorMessage(err: any): string {
-    if (err.error?.message) return err.error.message;
-    if (err.error?.errors) {
-      return (Object.values(err.error.errors).flat() as string[]).join(', ');
-    }
-    if (err.error?.title) return err.error.title;
-    return err.message;
-  }
 }

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
+import { signal } from '@angular/core';
+
 
 export interface Tour {
   id?: number;
@@ -17,8 +19,9 @@ export interface Tour {
   providedIn: 'root'
 })
 export class TourService {
-
-  private apiUrl = '/api/tours';
+  private apiUrl = '/api/tours'
+  selectedTourId = signal<number>(0); // Signal to hold the selected tour ID
+  selectedTourName = signal<string>(''); // Signal to hold the selected tour name
 
   constructor(private http: HttpClient) { }
 

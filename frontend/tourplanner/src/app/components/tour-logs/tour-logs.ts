@@ -1,7 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { TourLogsService, ITourLogs } from '../../services/tourlogs.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TourService } from '../../services/tour.services';
+import { ErrorHandlingService } from '../../services/ErrorHandlingService';
 
 @Component({
   selector: 'app-tour-logs',
@@ -13,9 +15,10 @@ export class TourLogs {
   tourLogs = signal<ITourLogs[]>([]);
   error = signal<string>('');
   editingLog: ITourLogs | null = null;
+  tourName = "";
 
   newTourLog: ITourLogs = {
-    tourId: 5, // muss später auf die echte ID gesetzt werden
+    tourId: 0,
     date: new Date(),
     comment: '',
     difficulty: 0,
@@ -24,9 +27,17 @@ export class TourLogs {
     totalTime: 0,
   };
 
-  constructor(private tourLogsService: TourLogsService) {
-    this.loadTourLogs(); 
+  constructor(private tourLogsService: TourLogsService, private tourService: TourService, private errorHandlingService: ErrorHandlingService) {
+    this.loadTourLogs();
+    effect(() => {
+      const id = this.tourService.selectedTourId();
+      this.newTourLog.tourId = id;
+      this.tourName = this.tourService.selectedTourName();
+    });
   }
+
+
+  
 
   autoResize(event: any) {
     const el = event.target;
@@ -50,16 +61,19 @@ export class TourLogs {
   loadTourLogs(): void {
     this.tourLogsService.getTourLogs().subscribe({
       next: (logs) => this.tourLogs.set(logs),
-      error: (err: any) => this.error.set('Failed to load tour logs: ' + err.message)
+      error: (err: any) => this.error.set(this.errorHandlingService.getErrorMessage(err))
     });
   }
 
   addTourLog(): void {
+    console.log('check 1');
     this.tourLogsService.createTourLog(this.newTourLog).subscribe({
       next: (createdLog) => { 
+        console.log('check 2');
         this.tourLogs.update(logs => [...logs, createdLog]);
+        console.log(this.tourService.selectedTourId());
         this.newTourLog = {
-          tourId: 1, // muss später auf die echte ID gesetzt werden
+          tourId: this.tourService.selectedTourId(), // muss später auf die echte ID gesetzt werden
           date: new Date(),
           comment: '',
           difficulty: 0, 
@@ -68,7 +82,7 @@ export class TourLogs {
           totalTime: 0,
         };
       },
-      error: (err) => this.error.set('Failed to add tour log: ' + err.message)
+      error: (err) => this.error.set(this.errorHandlingService.getErrorMessage(err))
     });
   }
 
@@ -92,7 +106,7 @@ export class TourLogs {
         this.editingLog = null;
         this.error.set('');
       },
-      error: (err: any) => this.error.set('Failed to update tour log: ' + err.message)
+      error: (err: any) => this.error.set(this.errorHandlingService.getErrorMessage(err))
     });
 
   }
@@ -106,7 +120,7 @@ export class TourLogs {
         }
         this.error.set('');
       },
-      error: (err: any) => this.error.set('Failed to delete tour log: ' + err.message)
+      error: (err: any) => this.error.set(this.errorHandlingService.getErrorMessage(err))
     });
   
   }

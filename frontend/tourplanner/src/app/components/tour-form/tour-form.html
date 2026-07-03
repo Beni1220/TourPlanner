@@ -83,7 +83,7 @@
         @if (authService.isLoggedIn()) {
           <div class="tour-grid">
             @for (tour of tours(); track tour.id) {
-              <article class="tour-card" (click)="selectTour(tour)">
+              <article class="tour-card" [class.tour-cardSelected]="tour.id === selectedTourId" (click)="selectTour(tour)">
                 @if (editingTour?.id === tour.id) {
                   @if (editingTour; as currentEdit) {
                     <div class="card-row">
@@ -108,7 +108,7 @@
                   }
                 } @else {
                   <div class="tour-title">{{ tour.name }}</div>
-                  <div class="tour-meta">{{ tour.transportType }} · {{ tour.from }} from · {{ tour.to }} to</div>
+                  <div class="tour-meta">{{ tour.transportType }} · from {{ tour.from }} · {{ tour.to }} · {{ roundKm(tour.tourDistance) }} km</div>
                   <div class="card-actions"> 
                     
                       <button class="secondary-button" (click)="startEdit(tour)">Bearbeiten</button>

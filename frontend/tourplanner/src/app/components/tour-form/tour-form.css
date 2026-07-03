@@ -67,6 +67,15 @@ body {
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.14);
 }
 
+.tour-cardSelected {
+  background: rgba(229, 255, 0, 0.18);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.14);
+}
+
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -279,3 +288,9 @@ button:not([disabled]).add-tour-btn:hover {
     grid-template-columns: 1fr;
   }
 }
+
+.selected {
+  color: #37ebff;
+}
+
+

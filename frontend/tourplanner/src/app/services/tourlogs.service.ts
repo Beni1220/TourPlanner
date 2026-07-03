@@ -18,6 +18,7 @@ export interface ITourLogs {
 })
 export class TourLogsService {
 
+  
   private apiUrl = '/api/tourlogs';
 
   constructor(private http: HttpClient) { }

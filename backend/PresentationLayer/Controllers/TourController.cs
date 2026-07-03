@@ -69,4 +69,15 @@ public class TourController : ControllerBase
         _service.DeleteTour(id);
         return Ok();
     }
+
+
+    [HttpGet("search")]
+    public IActionResult SearchTour([FromQuery] string searchTerm)
+    {
+        Console.WriteLine($"Searching for tours with term: {searchTerm}"); // Debugging line to check the search term
+        var tours = _service.SearchTour(searchTerm);
+        return Ok(tours);
+    }
+
+
 }

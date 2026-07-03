@@ -6,4 +6,6 @@ public interface ITourService
     void UpdateTour(Tour tour);
 
     void DeleteTour(int id);
+
+    List<Tour> SearchTour(string searchTerm);
 }

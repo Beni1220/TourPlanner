@@ -9,5 +9,7 @@ public interface ITourRepository
 
     void Delete(int id);
 
+    List<Tour> SearchTour(string searchTerm);
+
 
 }
