@@ -61,7 +61,7 @@ public class UserRepository : IUserRepository
         }
     }
 
-<<<<<<< Updated upstream
+
 
     // löschen und in addUserAsync weiter arbeiten
     public async Task<User> RegisterUserAsync(User user)
@@ -84,6 +84,5 @@ public class UserRepository : IUserRepository
 
     
 
-=======
->>>>>>> Stashed changes
+
 }

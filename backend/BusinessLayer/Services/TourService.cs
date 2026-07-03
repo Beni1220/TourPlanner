@@ -46,10 +46,6 @@ public class TourService : ITourService
         _repository.Delete(id);
     }
 
-    public List<Tour> GetToursByUserId(int userId)
-    {
-        return _repository.GetToursByUserId(userId);
-    }
 
     private void ValidateTour(Tour tour)
     {
