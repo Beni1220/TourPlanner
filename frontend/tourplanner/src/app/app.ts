@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TourService, Tour } from './services/tour.services';
@@ -17,5 +17,13 @@ import { AuthService } from './services/auth.service';
 })
 
 export class App {
-  constructor(public auth: AuthService) {}
+  constructor(public auth: AuthService) {
+    effect(() => {
+      // läuft automatisch jedes Mal, wenn sich authService.isLoggedIn() ändert
+      if (this.auth.isLoggedIn()) {
+        this.auth.username = localStorage.getItem('username') || '';
+      }
+    });
+  }
+
 }
