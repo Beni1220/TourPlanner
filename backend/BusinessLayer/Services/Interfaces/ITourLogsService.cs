@@ -6,4 +6,6 @@ public interface ITourLogsService
     void UpdateTourLog(TourLogs tourLog);
 
     void DeleteTourLog(int id);
+
+    List<TourLogs> SearchTourLogs(string searchTerm);
 }

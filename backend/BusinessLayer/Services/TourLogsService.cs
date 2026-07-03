@@ -28,6 +28,13 @@ public class TourLogsService : ITourLogsService
         _repository.DeleteTourLog(id);
     }
 
+    public List<TourLogs> SearchTourLogs(string searchTerm)
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+            throw new ArgumentException("Search term cannot be empty.");
+        return _repository.SearchTourLogs(searchTerm);
+    }
+
     private void ValidateTourLog(TourLogs tourLog)
     {
         if (tourLog == null)

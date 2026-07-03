@@ -46,4 +46,11 @@ public class TourLogsController : ControllerBase
         _logsService.DeleteTourLog(id);
         return Ok();
     }
+
+    [HttpGet("search")]
+    public IActionResult SearchTourLogs([FromQuery] string searchTerm)
+    {
+        var results = _logsService.SearchTourLogs(searchTerm);
+        return Ok(results);
+    }
 }

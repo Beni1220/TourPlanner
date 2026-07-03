@@ -47,4 +47,12 @@
             }
         }
 
+
+        public List<TourLogs> SearchTourLogs(string searchTerm)
+        {
+            return _context.TourLogs
+                .Where(tl => tl.Comment.Contains(searchTerm))
+                .ToList();
+        }
+
     }
