@@ -28,7 +28,6 @@ public class TourLogsService : ITourLogsService
         _repository.DeleteTourLog(id);
     }
 
-<<<<<<< HEAD
     public async Task<List<TourLogs>> GetTourLogsByUserIdAsync(int userId)
     {
         if (userId <= 0)
@@ -41,13 +40,12 @@ public class TourLogsService : ITourLogsService
         if (tourId <= 0)
             throw new ArgumentException("Invalid tour ID.");
         return _repository.GetTourNameByTourId(tourId);
-=======
+    }
     public List<TourLogs> SearchTourLogs(string searchTerm)
     {
         if (string.IsNullOrWhiteSpace(searchTerm))
             throw new ArgumentException("Search term cannot be empty.");
         return _repository.SearchTourLogs(searchTerm);
->>>>>>> 1a1b701c795be69959da1f78ddae8ab81ec0201d
     }
 
     private void ValidateTourLog(TourLogs tourLog)

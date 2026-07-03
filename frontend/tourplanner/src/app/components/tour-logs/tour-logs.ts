@@ -91,12 +91,14 @@ export class TourLogs {
   }
 
   addTourLog(): void {
-    console.log('check 1');
     this.tourLogsService.createTourLog(this.newTourLog).subscribe({
       next: (createdLog) => { 
-        console.log('check 2');
         this.tourLogs.update(logs => [...logs, createdLog]);
-        console.log(this.tourSelectionService.selectedTourId());
+
+        if (!this.tourNames().has(createdLog.tourId)) {
+          this.loadTourNames([createdLog]);
+        }
+        
         this.newTourLog = {
           tourId: this.tourSelectionService.selectedTourId(), // muss später auf die echte ID gesetzt werden
           date: new Date(),
