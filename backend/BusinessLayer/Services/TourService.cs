@@ -1,10 +1,12 @@
 public class TourService : ITourService
 {
     private readonly ITourRepository _repository;
+    private readonly ILogger<TourService> _logger;
 
-    public TourService(ITourRepository repository)
+    public TourService(ITourRepository repository, ILogger<TourService> logger)
     {
         _repository = repository;
+        _logger = logger;
     }
 
     public List<Tour> GetAllTours()
@@ -14,7 +16,11 @@ public class TourService : ITourService
 
     public Tour CreateTour(Tour tour, int userId)
     {
+
         ValidateTour(tour);
+
+        // Log the creation of a new tour with user ID and tour name
+        _logger.LogInformation("Creating a new tour for user {UserId}: {TourName}", userId, tour.Name);
 
         return _repository.Create(tour, userId);
     }
@@ -26,6 +32,8 @@ public class TourService : ITourService
 
         ValidateTour(tour);
 
+        _logger.LogInformation("Updating tour {TourId}: {TourName}", tour.Id, tour.Name);
+
         _repository.Update(tour);
     }
 
@@ -34,7 +42,13 @@ public class TourService : ITourService
         if (id <= 0)
             throw new ArgumentException("Invalid tour id.");
 
+        _logger.LogInformation("Deleting tour {TourId}", id);
         _repository.Delete(id);
+    }
+
+    public List<Tour> GetToursByUserId(int userId)
+    {
+        return _repository.GetToursByUserId(userId);
     }
 
     private void ValidateTour(Tour tour)
@@ -71,10 +85,10 @@ public class TourService : ITourService
         if (!validTransportTypes.Contains(tour.TransportType))
             throw new ArgumentException("Invalid transport type.");
 
-        // if (tour.TourDistance <= 0)
-        //     throw new ArgumentException("Distance must be greater than 0.");
+         if (tour.TourDistance <= 0)
+             throw new ArgumentException("Distance must be greater than 0.");
 
-        // if (tour.EstimatedTime <= 0)
-        //     throw new ArgumentException("Estimated time must be greater than 0.");
+         if (tour.EstimatedTime <= 0)
+             throw new ArgumentException("Estimated time must be greater than 0.");
     }
 }

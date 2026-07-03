@@ -88,42 +88,36 @@ export class TourForm {
       return;
     }
 
-    this.tourService.createTour(this.newTour).subscribe({
+    try {
+      const { coordinates, distance } = await this.openRouteService.loadRouteFromORS(
+        this.newTour.from,
+        this.newTour.to
+      );
 
-      next: async (tour) => {
+      this.newTour.tourDistance = distance; // NEU – Distanz vor dem Erstellen setzen
 
-        try {
-
-          const route = await this.openRouteService.getRoute(
-            tour.from,
-            tour.to,
-            tour.id!
-          );
-
-          this.tourService.tourRouteAdded.next(route);
-
-          this.tours.update(list => [...list, tour]);
-
-          this.resetNewTour();
-
-          this.fromValid.set(null);
-          this.toValid.set(null);
-
-          this.error.set('');
-
-        } catch (err) {
-
-          console.error(err);
-          this.error.set('Route konnte nicht erstellt werden');
-
-        }
-
-      },
-
-      error: err =>
-        this.error.set(this.getErrorMessage(err))
-
-    });
+      this.tourService.createTour(this.newTour).subscribe({
+        next: async (tour) => {
+          try {
+            await this.openRouteService.saveRoute(tour.id!, coordinates);
+            this.tourService.tourRouteAdded.next(coordinates);
+            this.tours.update(list => [...list, tour]);
+            this.resetNewTour();
+            this.fromValid.set(null);
+            this.toValid.set(null);
+            this.error.set('');
+          } catch (err) {
+            console.error(err);
+            this.error.set('Route konnte nicht erstellt werden');
+          }
+        },
+        error: err =>
+          this.error.set(this.getErrorMessage(err))
+      });
+    } catch (err) {
+      console.error(err);
+      this.error.set('Route konnte nicht berechnet werden');
+    }
 
 }
 

@@ -2,10 +2,12 @@ using Microsoft.EntityFrameworkCore;
 public class UserRepository : IUserRepository
 {
     private readonly TourPlannerContext _context;
+    private readonly ILogger<UserRepository> _logger;
 
-    public UserRepository(TourPlannerContext context)
+    public UserRepository(TourPlannerContext context, ILogger<UserRepository> logger)
     {
         _context = context;
+        _logger = logger;
     }
 
     public async Task<User> GetUserByUsernameAsync(string Username)
@@ -30,9 +32,17 @@ public class UserRepository : IUserRepository
 
     public async Task<User> AddUserAsync(User user)
     {
-        await _context.Users.AddAsync(user);
-        await _context.SaveChangesAsync();
-        return user;
+        try
+        {
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+            return user;
+        } catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error adding user");
+            throw;
+        }
+       
     }
 
     public async Task UpdateUserAsync(User user)
@@ -51,6 +61,7 @@ public class UserRepository : IUserRepository
         }
     }
 
+<<<<<<< Updated upstream
 
     // löschen und in addUserAsync weiter arbeiten
     public async Task<User> RegisterUserAsync(User user)
@@ -73,4 +84,6 @@ public class UserRepository : IUserRepository
 
     
 
+=======
+>>>>>>> Stashed changes
 }

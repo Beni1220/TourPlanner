@@ -41,6 +41,11 @@ export class TourService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
+  getTourByToken(): Observable<Tour> {
+    const token = localStorage.getItem('token');
+    return this.http.get<Tour>(`${this.apiUrl}/editableTours`, {headers: { Authorization: `Bearer ${token}`}});
+  }
+
   tourRouteAdded = new Subject<[number, number][]>();
 
 }

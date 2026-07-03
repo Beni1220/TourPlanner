@@ -2,11 +2,13 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly TokenService _tokenService;
+    private readonly ILogger<UserService> _logger;
 
-    public UserService(IUserRepository userRepository, TokenService tokenService)
+    public UserService(IUserRepository userRepository, TokenService tokenService, ILogger<UserService> logger)
     {
         _userRepository = userRepository;
         _tokenService = tokenService;
+        _logger = logger;
     }
 
     public async Task<bool> UsernameExists(string Username)
@@ -62,6 +64,8 @@ public class UserService : IUserService
         };
         
         ValidateUser(newUser);
+
+        _logger.LogDebug($"User details: Username={newUser.Username}, CreatedAt={newUser.CreatedAt}");
         
         
         await _userRepository.AddUserAsync(newUser);
@@ -80,10 +84,15 @@ public class UserService : IUserService
             throw new UnauthorizedAccessException("Invalid username or password.");
             
         if (userFromDb.Password != user.Password || userFromDb.Username != user.Username)
+        {
+            _logger.LogWarning($"Login failed for user {user.Username}. Provided password: {user.Password}, Expected password: {userFromDb.Password}");
             throw new UnauthorizedAccessException("Invalid username or password.");
+        }
+            
         
         var token = _tokenService.GenerateToken(userFromDb.Id, userFromDb.Username);
         // Console.WriteLine($"Business Layer ------------- Generated token for user {userFromDb.Username}: {token}"); // Debugging line to check the generated token
+        _logger.LogInformation($"User {userFromDb.Username} logged in successfully");
         return token;
 
         

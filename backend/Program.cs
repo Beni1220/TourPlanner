@@ -34,6 +34,12 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddSingleton<TokenService>();
 
+builder.Logging.ClearProviders();
+
+builder.Logging.AddConsole();
+
+builder.Logging.AddDebug();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

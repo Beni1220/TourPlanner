@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import {environment} from '../../environments/environment';
 
 export interface TourCoordinate {
   id?: number;
@@ -16,8 +17,9 @@ export interface TourCoordinate {
 })
 export class OpenrouteService {
 
-  private apiKey = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImE1MGFlMzlmZDcwYzQ4NDY5MWE3NzgxNDc4OWJhZTQwIiwiaCI6Im11cm11cjY0In0=';
+  private apiKey = environment.openRouteApiKey;
   private apiUrl = '/api/tourcoordinates';
+  public lastDistance: number | null = null; 
 
   constructor(private http: HttpClient) {}
 
@@ -27,7 +29,6 @@ export class OpenrouteService {
     tourId: number
   ): Promise<[number, number][]> {
 
-    // zuerst Backend
     const backendRoute = await this.loadRouteFromBackend(tourId);
 
     if (backendRoute.length > 0) {
@@ -35,13 +36,14 @@ export class OpenrouteService {
       return backendRoute;
     }
 
-    console.log('Route von ORS laden');
+    //console.log('Route von ORS laden');
 
-    const orsRoute = await this.loadRouteFromORS(from, to);
+    const orsResult = await this.loadRouteFromORS(from, to);  
 
-    await this.saveRoute(tourId, orsRoute);
+    this.lastDistance = orsResult.distance;                     
+    await this.saveRoute(tourId, orsResult.coordinates);     
 
-    return orsRoute;
+    return orsResult.coordinates;                                
   }
 
   private async loadRouteFromBackend(
@@ -63,16 +65,15 @@ export class OpenrouteService {
     }
   }
 
-  private async loadRouteFromORS(
+  public async loadRouteFromORS(
     from: string,
     to: string
-  ): Promise<[number, number][]> {
-
+  ): Promise<{ coordinates: [number, number][]; distance: number }> {
     const start = await this.getCoordinates(from);
     const end = await this.getCoordinates(to);
+    //console.log('Start:', start);
+    //console.log('End:', end);
 
-      console.log('Start:', start);
-      console.log('End:', end);
     const response = await fetch(
       'https://api.openrouteservice.org/v2/directions/driving-car/geojson',
       {
@@ -88,11 +89,20 @@ export class OpenrouteService {
     );
 
     const geo = await response.json();
+    //console.log('ORS Status:', response.status, response.ok);   
+    //console.log('ORS Response:', geo);                         
 
-    return geo.features[0].geometry.coordinates;
+    if (!response.ok || !geo.features) {                        
+      throw new Error(geo?.error?.message ?? 'ORS-Anfrage fehlgeschlagen');
+    }
+
+    return {
+      coordinates: geo.features[0].geometry.coordinates,
+      distance: geo.features[0].properties.summary.distance
+    };
   }
 
-  private async saveRoute(
+  public async saveRoute(
     tourId: number,
     route: [number, number][]
   ) {
