@@ -63,20 +63,6 @@ public class UserRepository : IUserRepository
 
 
 
-    // löschen und in addUserAsync weiter arbeiten
-    public async Task<User> RegisterUserAsync(User user)
-    {
-        var newUser = new User
-        {
-            Username = user.Username,
-            Password = user.Password
-        };
-
-        await _context.Users.AddAsync(user);
-        await _context.SaveChangesAsync();
-        return newUser;
-    }
-
     public async Task<List<Tour>> GetToursByUserIdAsync(int userId)
     {
         return await _context.Tours.Where(t => t.UserId == userId).ToListAsync();

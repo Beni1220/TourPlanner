@@ -27,6 +27,7 @@ export class User {
         localStorage.setItem('token', res.token);
         this.auth.userLoggedIn();
         this.auth.close();
+        this.auth.username = this.loginForm.username;
         location.reload(); 
       },
       error: (err) => console.error(err)
@@ -38,6 +39,7 @@ export class User {
       next: (res: any) => {
         localStorage.setItem('token', res.token);
         this.auth.userLoggedIn();
+        this.auth.username = this.registerForm.username;
         this.auth.close();
       },
       error: (err) => console.error(err)

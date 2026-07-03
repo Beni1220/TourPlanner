@@ -7,7 +7,21 @@
       <p>Min = Minuten, km = Kilometer. Erstelle, bearbeite oder lösche deine Touren direkt hier.</p>
     </div>
 
-    <button class="login-trigger" (click)="auth.open()">Sign in</button>
+    <button class="login-trigger" (click)="auth.open()">
+    @if (auth.isLoggedIn()) {
+      <p>{{ auth.username }}</p>
+    } @else {
+      <p>Sign in</p>
+    }
+    </button>
+
+    <!-- <button class="login-trigger" (click)="auth.open()">
+      @if (auth.isLoggedIn()) {
+          <p>{{ auth.username }}</p>
+        } @else {
+          <p>Sign in</p>
+        }
+    </button> -->
 
     @if (auth.showLogin()) {
       <div class="modal-backdrop" (click)="auth.close()">
