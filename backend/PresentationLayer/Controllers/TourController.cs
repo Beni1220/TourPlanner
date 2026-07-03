@@ -81,7 +81,6 @@ public class TourController : ControllerBase
         return Ok(tours);
     }
 
-<<<<<<< Updated upstream
     [HttpGet("token")]
     public async Task<IActionResult> GetToursByUserId([FromHeader(Name = "Authorization")] string token)
     {
@@ -91,7 +90,6 @@ public class TourController : ControllerBase
         var tours = await _service.GetToursByUserIdAsync(userId);
         return Ok(tours);
     }
-=======
     [HttpGet("export")]
     public IActionResult ExportTourAndLogsJson()
     {
@@ -110,5 +108,4 @@ public class TourController : ControllerBase
     }
 
 
->>>>>>> Stashed changes
 }
