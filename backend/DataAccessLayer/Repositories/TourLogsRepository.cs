@@ -58,9 +58,21 @@ public class TourLogsRepository : ITourLogsRepository
         return await _context.TourLogs.Where(t => tourIds.Contains(t.TourId)).ToListAsync();
     }
 
+<<<<<<< HEAD
     public string GetTourNameByTourId(int tourId)
     {
         var tour = _context.Tours.Find(tourId);
         return tour != null ? tour.Name : null;
     }
 }
+=======
+
+        public List<TourLogs> SearchTourLogs(string searchTerm)
+        {
+            return _context.TourLogs
+                .Where(tl => tl.Comment.Contains(searchTerm))
+                .ToList();
+        }
+
+    }
+>>>>>>> 1a1b701c795be69959da1f78ddae8ab81ec0201d

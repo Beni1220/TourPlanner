@@ -60,6 +60,7 @@ public class TourLogsController : ControllerBase
         return Ok();
     }
 
+<<<<<<< HEAD
     [HttpGet("token")]
     public async Task<IActionResult> GetTourLogsByUserId([FromHeader(Name = "Authorization")] string token)
     {
@@ -89,5 +90,12 @@ public class TourLogsController : ControllerBase
         {
             return BadRequest(new { message = ex.Message });
         }
+=======
+    [HttpGet("search")]
+    public IActionResult SearchTourLogs([FromQuery] string searchTerm)
+    {
+        var results = _logsService.SearchTourLogs(searchTerm);
+        return Ok(results);
+>>>>>>> 1a1b701c795be69959da1f78ddae8ab81ec0201d
     }
 }
